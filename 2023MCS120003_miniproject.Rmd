@@ -3,6 +3,7 @@ title: "2023MCS120003_miniproject"
 author: "Sumod Sethumadhavan"
 date: "11/11/2023"
 output: html_document
+
 ---
 
 ```{r setup, include=FALSE}
@@ -799,3 +800,142 @@ Precipitation Trends: Analyze changes in total precipitation over the decades. C
 Variability Between Cities: Different cities may show different trends due to their geographic and climatic differences.
 Limitations: Remember that while this analysis can indicate trends, it doesn't prove causation. Climatic changes are influenced by a multitude of factors.
 By comparing decadal averages and totals, you can get a snapshot of how climate parameters have evolved over the past 30 years, offering insights into potential long-term climate change trends.
+
+# Feature Engineering for Rainfall Prediction
+
+```{r}
+# Example using Bangalore's data
+
+# Creating new features based on the date
+bangalore_df <- bangalore_df %>%
+                mutate(Month = format(time, "%m"),
+                       Day = format(time, "%d"),
+                       DayOfYear = yday(time))
+
+# Removing the original 'time' column
+bangalore_df <- select(bangalore_df, -time)
+
+
+# Splitting the data into training and testing sets
+# Assuming 80% training, 20% testing split
+
+set.seed(123) # For reproducibility
+training_indices <- sample(1:nrow(bangalore_df), 0.8 * nrow(bangalore_df))
+
+train_data <- bangalore_df[training_indices, ]
+test_data <- bangalore_df[-training_indices, ]
+
+library(randomForest)
+
+# Using Random Forest for rainfall prediction
+rf_model <- randomForest(prcp ~ ., data = train_data)
+
+# Summarizing the model
+print(rf_model)
+
+
+# Making predictions on the test data
+predictions <- predict(rf_model, test_data)
+
+# Using Mean Absolute Error (MAE) for evaluation
+mae <- mean(abs(predictions - test_data$prcp))
+print(paste("Mean Absolute Error: ", mae))
+
+```
+
+Interpretation of the Results:
+Mean of Squared Residuals: This is about 80.49, which gives a sense of the average squared difference between the observed actual outcomes and the values predicted by the model.
+
+Percentage of Variance Explained: The model explains around 9.4% of the variance in the rainfall data. This is relatively low, suggesting that the model might not be capturing all the complexities and patterns in the rainfall data.
+
+Mean Absolute Error (MAE): An MAE of 3.80 suggests that, on average, the model's predictions are about 3.80 units (presumably millimeters if the rainfall is measured that way) away from the actual values.
+
+## Predictive Modeling with Decision Trees
+
+### Building a Decision Tree Model for Rainfall Prediction
+
+```{r decision-tree-model}
+
+
+library(rpart)
+
+# Building the decision tree model
+dt_model <- rpart(prcp ~ ., data = train_data, method = "anova")
+
+# Printing the model
+print(dt_model)
+
+# Making predictions on the test data
+predictions_dt <- predict(dt_model, test_data)
+
+# Using Mean Absolute Error (MAE) for evaluation
+mae_dt <- mean(abs(predictions_dt - test_data$prcp))
+print(paste("Mean Absolute Error: ", mae_dt))
+
+# Additional evaluation metrics - Root Mean Square Error (RMSE)
+rmse_dt <- sqrt(mean((predictions_dt - test_data$prcp)^2))
+print(paste("Root Mean Square Error: ", rmse_dt))
+
+library(rpart.plot)
+
+# Plotting the decision tree
+rpart.plot(dt_model, main = "Decision Tree for Rainfall Prediction")
+
+
+# Enhanced plotting of the decision tree
+rpart.plot(dt_model, 
+           main = "Decision Tree for Rainfall Prediction", 
+           type = 4,   # Enhanced tree type with split labels, variable names, and fitted values
+           extra = 101, # Display the number of observations in each node
+           under = TRUE, # Place node labels under the node (instead of inside it)
+           faclen = 0,   # Full factor levels in split labels
+           cex = 0.6,    # Size of text
+           tweak = 1.2)  # Adjust size and spacing for a cleaner look
+
+
+```
+
+# Geospatial Analysis:
+
+```{r}
+
+library(leaflet)
+
+# Ensure the column names are correctly referenced
+station_geo_df$Latitude <- as.numeric(station_geo_df$Latitude)
+station_geo_df$longitude <- as.numeric(station_geo_df$longitude)
+
+# Create a leaflet map
+leaflet(station_geo_df) %>% 
+  addTiles() %>% 
+  addMarkers(~longitude, ~Latitude, popup = ~Location_Name)
+
+# Creating a color palette
+pal <- colorNumeric(palette = "viridis", domain = station_geo_df$Elevation)
+
+leaflet(station_geo_df) %>% 
+  addTiles() %>% 
+  addCircleMarkers(~longitude, ~Latitude, 
+                   popup = ~paste(Location_Name, "Elevation:", Elevation, "m"),
+                   color = ~pal(Elevation), fill = TRUE)
+
+
+library(leaflet)
+library(leaflet.extras)
+
+# Calculating average rainfall for each city
+average_rainfall <- all_cities_df %>%
+  group_by(City) %>%
+  summarise(Avg_Rainfall = mean(prcp, na.rm = TRUE))
+
+# Merging with station_geo_df to include geographic coordinates
+station_geo_df <- merge(station_geo_df, average_rainfall, by.x = "Location_Name", by.y = "City")
+
+average_rainfall 
+
+leaflet(station_geo_df) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addHeatmap(lng = ~longitude, lat = ~Latitude, intensity = ~Avg_Rainfall, radius = 20, blur = 15)
+
+```
+
