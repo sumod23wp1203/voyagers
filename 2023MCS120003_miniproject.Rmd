@@ -1,0 +1,801 @@
+---
+title: "2023MCS120003_miniproject"
+author: "Sumod Sethumadhavan"
+date: "11/11/2023"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+```{r}
+# Loading the datasets
+
+# Bangalore
+bangalore_df <- read.csv("d1/Bangalore_1990_2022_BangaloreCity.csv")
+
+# Chennai
+chennai_df <- read.csv("d1/Chennai_1990_2022_Madras.csv")
+
+# Delhi
+delhi_df <- read.csv("d1/Delhi_NCR_1990_2022_Safdarjung.csv")
+
+# Lucknow
+lucknow_df <- read.csv("d1/Lucknow_1990_2022.csv")
+
+# Mumbai
+mumbai_df <- read.csv("d1/Mumbai_1990_2022_Santacruz.csv")
+
+# Rajasthan (Jodhpur)
+rajasthan_df <- read.csv("d1/Rajasthan_1990_2022_Jodhpur.csv")
+
+# Bhubaneswar
+bhubaneswar_df <- read.csv("d1/weather_Bhubhneshwar_1990_2022.csv")
+
+# Rourkela
+rourkela_df <- read.csv("d1/weather_Rourkela_2021_2022.csv")
+
+# Load the Station GeoLocation data
+station_geo_df <- read.csv("d1/Station_GeoLocation_Longitute_Latitude_Elevation_EPSG_4326.csv")
+
+# Preprocessing the Bangalore dataset
+library(dplyr)
+
+# Convert date column to Date format
+bangalore_df$time <- as.Date(bangalore_df$time, format = "%d-%m-%Y")
+
+# Filter data for 2015-2020
+bangalore_df <- bangalore_df %>%
+                filter(format(time, "%Y") >= "2015" & format(time, "%Y") <= "2020")
+
+
+#chennai
+chennai_df$time <- as.Date(chennai_df$time, format = "%d-%m-%Y")
+chennai_df <- chennai_df %>%
+              filter(format(time, "%Y") >= "2015" & format(time, "%Y") <= "2020")
+
+#Delhi
+delhi_df$time <- as.Date(delhi_df$time, format = "%d-%m-%Y")
+delhi_df <- delhi_df %>%
+            filter(format(time, "%Y") >= "2015" & format(time, "%Y") <= "2020")
+
+#Lucknow
+lucknow_df$time <- as.Date(lucknow_df$time, format = "%d-%m-%Y")
+lucknow_df <- lucknow_df %>%
+              filter(format(time, "%Y") >= "2015" & format(time, "%Y") <= "2020")
+
+#MUmbai
+mumbai_df$time <- as.Date(mumbai_df$time, format = "%d-%m-%Y")
+mumbai_df <- mumbai_df %>%
+              filter(format(time, "%Y") >= "2015" & format(time, "%Y") <= "2020")
+
+#rajasthan
+rajasthan_df$time <- as.Date(rajasthan_df$time, format = "%d-%m-%Y")
+rajasthan_df <- rajasthan_df %>%
+                filter(format(time, "%Y") >= "2015" & format(time, "%Y") <= "2020")
+
+#bhub
+bhubaneswar_df$time <- as.Date(bhubaneswar_df$time, format = "%d-%m-%Y")
+bhubaneswar_df <- bhubaneswar_df %>%
+                  filter(format(time, "%Y") >= "2015" & format(time, "%Y") <= "2020")
+
+#rourkela
+rourkela_df$time <- as.Date(rourkela_df$time, format = "%d-%m-%Y")
+rourkela_df <- rourkela_df %>%
+               filter(format(time, "%Y") >= "2015" & format(time, "%Y") <= "2020")
+
+# Handling missing values in Bangalore dataset
+bangalore_df <- bangalore_df %>%
+                mutate(tavg = ifelse(is.na(tavg), mean(tavg, na.rm = TRUE), tavg),
+                       tmin = ifelse(is.na(tmin), mean(tmin, na.rm = TRUE), tmin),
+                       tmax = ifelse(is.na(tmax), mean(tmax, na.rm = TRUE), tmax),
+                       prcp = ifelse(is.na(prcp), mean(prcp, na.rm = TRUE), prcp))
+
+# Chennai
+chennai_df <- chennai_df %>%
+              mutate(tavg = ifelse(is.na(tavg), mean(tavg, na.rm = TRUE), tavg),
+                     tmin = ifelse(is.na(tmin), mean(tmin, na.rm = TRUE), tmin),
+                     tmax = ifelse(is.na(tmax), mean(tmax, na.rm = TRUE), tmax),
+                     prcp = ifelse(is.na(prcp), mean(prcp, na.rm = TRUE), prcp))
+
+#Delhi
+
+delhi_df <- delhi_df %>%
+            mutate(tavg = ifelse(is.na(tavg), mean(tavg, na.rm = TRUE), tavg),
+                   tmin = ifelse(is.na(tmin), mean(tmin, na.rm = TRUE), tmin),
+                   tmax = ifelse(is.na(tmax), mean(tmax, na.rm = TRUE), tmax),
+                   prcp = ifelse(is.na(prcp), mean(prcp, na.rm = TRUE), prcp))
+
+# Lucknow
+lucknow_df <- lucknow_df %>%
+              mutate(tavg = ifelse(is.na(tavg), mean(tavg, na.rm = TRUE), tavg),
+                     tmin = ifelse(is.na(tmin), mean(tmin, na.rm = TRUE), tmin),
+                     tmax = ifelse(is.na(tmax), mean(tmax, na.rm = TRUE), tmax),
+                     prcp = ifelse(is.na(prcp), mean(prcp, na.rm = TRUE), prcp))
+
+#Mumbai Dataset
+mumbai_df <- mumbai_df %>%
+             mutate(tavg = ifelse(is.na(tavg), mean(tavg, na.rm = TRUE), tavg),
+                    tmin = ifelse(is.na(tmin), mean(tmin, na.rm = TRUE), tmin),
+                    tmax = ifelse(is.na(tmax), mean(tmax, na.rm = TRUE), tmax),
+                    prcp = ifelse(is.na(prcp), mean(prcp, na.rm = TRUE), prcp))
+
+#rajasthan
+rajasthan_df <- rajasthan_df %>%
+                mutate(tavg = ifelse(is.na(tavg), mean(tavg, na.rm = TRUE), tavg),
+                       tmin = ifelse(is.na(tmin), mean(tmin, na.rm = TRUE), tmin),
+                       tmax = ifelse(is.na(tmax), mean(tmax, na.rm = TRUE), tmax),
+                       prcp = ifelse(is.na(prcp), mean(prcp, na.rm = TRUE), prcp))
+
+#bhub
+bhubaneswar_df <- bhubaneswar_df %>%
+                  mutate(tavg = ifelse(is.na(tavg), mean(tavg, na.rm = TRUE), tavg),
+                         tmin = ifelse(is.na(tmin), mean(tmin, na.rm = TRUE), tmin),
+                         tmax = ifelse(is.na(tmax), mean(tmax, na.rm = TRUE), tmax),
+                         prcp = ifelse(is.na(prcp), mean(prcp, na.rm = TRUE), prcp))
+
+#rourkela
+rourkela_df <- rourkela_df %>%
+               mutate(tavg = ifelse(is.na(tavg), mean(tavg, na.rm = TRUE), tavg),
+                      tmin = ifelse(is.na(tmin), mean(tmin, na.rm = TRUE), tmin),
+                      tmax = ifelse(is.na(tmax), mean(tmax, na.rm = TRUE), tmax),
+                      prcp = ifelse(is.na(prcp), mean(prcp, na.rm = TRUE), prcp))
+```
+
+#### Summary Statistics:
+```{r}
+# Example for Bangalore
+summary_stats_bangalore <- bangalore_df %>%
+                           summarise(Mean_Tavg = mean(tavg, na.rm = TRUE),
+                                     Median_Tavg = median(tavg, na.rm = TRUE),
+                                     SD_Tavg = sd(tavg, na.rm = TRUE),
+                                     Mean_Prcp = mean(prcp, na.rm = TRUE),
+                                     Median_Prcp = median(prcp, na.rm = TRUE),
+                                     SD_Prcp = sd(prcp, na.rm = TRUE))
+
+summary_stats_bangalore
+#chennai
+
+summary_stats_chennai <- chennai_df %>%
+                         summarise(Mean_Tavg = mean(tavg, na.rm = TRUE),
+                                   Median_Tavg = median(tavg, na.rm = TRUE),
+                                   SD_Tavg = sd(tavg, na.rm = TRUE),
+                                   Mean_Prcp = mean(prcp, na.rm = TRUE),
+                                   Median_Prcp = median(prcp, na.rm = TRUE),
+                                   SD_Prcp = sd(prcp, na.rm = TRUE))
+
+# Delhi
+summary_stats_delhi <- delhi_df %>%
+                       summarise(Mean_Tavg = mean(tavg, na.rm = TRUE),
+                                 Median_Tavg = median(tavg, na.rm = TRUE),
+                                 SD_Tavg = sd(tavg, na.rm = TRUE),
+                                 Mean_Prcp = mean(prcp, na.rm = TRUE),
+                                 Median_Prcp = median(prcp, na.rm = TRUE),
+                                 SD_Prcp = sd(prcp, na.rm = TRUE))
+
+#Lucknow
+summary_stats_lucknow <- lucknow_df %>%
+                         summarise(Mean_Tavg = mean(tavg, na.rm = TRUE),
+                                   Median_Tavg = median(tavg, na.rm = TRUE),
+                                   SD_Tavg = sd(tavg, na.rm = TRUE),
+                                   Mean_Prcp = mean(prcp, na.rm = TRUE),
+                                   Median_Prcp = median(prcp, na.rm = TRUE),
+                                   SD_Prcp = sd(prcp, na.rm = TRUE))
+#Mumbai
+summary_stats_mumbai <- mumbai_df %>%
+                        summarise(Mean_Tavg = mean(tavg, na.rm = TRUE),
+                                  Median_Tavg = median(tavg, na.rm = TRUE),
+                                  SD_Tavg = sd(tavg, na.rm = TRUE),
+                                  Mean_Prcp = mean(prcp, na.rm = TRUE),
+                                  Median_Prcp = median(prcp, na.rm = TRUE),
+                                  SD_Prcp = sd(prcp, na.rm = TRUE))
+
+#Rajasthan
+summary_stats_rajasthan <- rajasthan_df %>%
+                           summarise(Mean_Tavg = mean(tavg, na.rm = TRUE),
+                                     Median_Tavg = median(tavg, na.rm = TRUE),
+                                     SD_Tavg = sd(tavg, na.rm = TRUE),
+                                     Mean_Prcp = mean(prcp, na.rm = TRUE),
+                                     Median_Prcp = median(prcp, na.rm = TRUE),
+                                     SD_Prcp = sd(prcp, na.rm = TRUE))
+
+#Bhubaneshwar
+summary_stats_bhubaneswar <- bhubaneswar_df %>%
+                             summarise(Mean_Tavg = mean(tavg, na.rm = TRUE),
+                                       Median_Tavg = median(tavg, na.rm = TRUE),
+                                       SD_Tavg = sd(tavg, na.rm = TRUE),
+                                       Mean_Prcp = mean(prcp, na.rm = TRUE),
+                                       Median_Prcp = median(prcp, na.rm = TRUE),
+                                       SD_Prcp = sd(prcp, na.rm = TRUE))
+#Rourkela
+summary_stats_rourkela <- rourkela_df %>%
+                          summarise(Mean_Tavg = mean(tavg, na.rm = TRUE),
+                                    Median_Tavg = median(tavg, na.rm = TRUE),
+                                    SD_Tavg = sd(tavg, na.rm = TRUE),
+                                    Mean_Prcp = mean(prcp, na.rm = TRUE),
+                                    Median_Prcp = median(prcp, na.rm = TRUE),
+                                    SD_Prcp = sd(prcp, na.rm = TRUE))
+
+
+```
+## Trend Analysis
+
+### Temperature and Precipitation Trends Over Time
+```{r}
+library(ggplot2)
+
+# Function to calculate annual trends
+calculate_annual_trends <- function(df) {
+  df %>% 
+    group_by(Year = format(time, "%Y")) %>%
+    summarise(Mean_Tavg = mean(tavg, na.rm = TRUE),
+              Total_Prcp = sum(prcp, na.rm = TRUE))
+}
+
+```
+
+## Trend Analysis for Each City
+
+### Bangalore Trend Analysis
+```{r}
+# Annual trends for Bangalore
+annual_trends_bangalore <- bangalore_df %>%
+                           group_by(Year = format(time, "%Y")) %>%
+                           summarise(Mean_Tavg = mean(tavg, na.rm = TRUE),
+                                     Total_Prcp = sum(prcp, na.rm = TRUE))
+
+# Temperature Trend Plot for Bangalore
+ggplot(annual_trends_bangalore, aes(x = Year, y = Mean_Tavg)) +
+    geom_point() +
+    geom_line() +
+    labs(title = "Annual Mean Temperature Trend in Bangalore (2015-2020)",
+         x = "Year",
+         y = "Mean Temperature (°C)") +
+    theme_minimal()
+
+# Precipitation Trend Plot for Bangalore
+ggplot(annual_trends_bangalore, aes(x = Year, y = Total_Prcp)) +
+    geom_point() +
+    geom_line() +
+    labs(title = "Annual Total Precipitation Trend in Bangalore (2015-2020)",
+         x = "Year",
+         y = "Total Precipitation (mm)") +
+    theme_minimal()
+
+# Annual trends for Chennai
+annual_trends_chennai <- chennai_df %>%
+                         group_by(Year = format(time, "%Y")) %>%
+                         summarise(Mean_Tavg = mean(tavg, na.rm = TRUE),
+                                   Total_Prcp = sum(prcp, na.rm = TRUE))
+
+# Temperature Trend Plot for Chennai
+ggplot(annual_trends_chennai, aes(x = Year, y = Mean_Tavg)) +
+    geom_point() +
+    geom_line() +
+    labs(title = "Annual Mean Temperature Trend in Chennai (2015-2020)",
+         x = "Year",
+         y = "Mean Temperature (°C)") +
+    theme_minimal()
+
+# Precipitation Trend Plot for Chennai
+ggplot(annual_trends_chennai, aes(x = Year, y = Total_Prcp)) +
+    geom_point() +
+    geom_line() +
+    labs(title = "Annual Total Precipitation Trend in Chennai (2015-2020)",
+         x = "Year",
+         y = "Total Precipitation (mm)") +
+    theme_minimal()
+
+# Annual trends for Delhi
+annual_trends_delhi <- delhi_df %>%
+                       group_by(Year = format(time, "%Y")) %>%
+                       summarise(Mean_Tavg = mean(tavg, na.rm = TRUE),
+                                 Total_Prcp = sum(prcp, na.rm = TRUE))
+
+# Temperature Trend Plot for Delhi
+ggplot(annual_trends_delhi, aes(x = Year, y = Mean_Tavg)) +
+    geom_point() +
+    geom_line() +
+    labs(title = "Annual Mean Temperature Trend in Delhi (2015-2020)",
+         x = "Year",
+         y = "Mean Temperature (°C)") +
+    theme_minimal()
+
+# Precipitation Trend Plot for Delhi
+ggplot(annual_trends_delhi, aes(x = Year, y = Total_Prcp)) +
+    geom_point() +
+    geom_line() +
+    labs(title = "Annual Total Precipitation Trend in Delhi (2015-2020)",
+         x = "Year",
+         y = "Total Precipitation (mm)") +
+    theme_minimal()
+
+# Annual trends for Lucknow
+annual_trends_lucknow <- lucknow_df %>%
+                         group_by(Year = format(time, "%Y")) %>%
+                         summarise(Mean_Tavg = mean(tavg, na.rm = TRUE),
+                                   Total_Prcp = sum(prcp, na.rm = TRUE))
+
+# Temperature Trend Plot for Lucknow
+ggplot(annual_trends_lucknow, aes(x = Year, y = Mean_Tavg)) +
+    geom_point() +
+    geom_line() +
+    labs(title = "Annual Mean Temperature Trend in Lucknow (2015-2020)",
+         x = "Year",
+         y = "Mean Temperature (°C)") +
+    theme_minimal()
+
+# Precipitation Trend Plot for Lucknow
+ggplot(annual_trends_lucknow, aes(x = Year, y = Total_Prcp)) +
+    geom_point() +
+    geom_line() +
+    labs(title = "Annual Total Precipitation Trend in Lucknow (2015-2020)",
+         x = "Year",
+         y = "Total Precipitation (mm)") +
+    theme_minimal()
+
+# Annual trends for Mumbai
+annual_trends_mumbai <- mumbai_df %>%
+                        group_by(Year = format(time, "%Y")) %>%
+                        summarise(Mean_Tavg = mean(tavg, na.rm = TRUE),
+                                  Total_Prcp = sum(prcp, na.rm = TRUE))
+
+# Temperature Trend Plot for Mumbai
+ggplot(annual_trends_mumbai, aes(x = Year, y = Mean_Tavg)) +
+    geom_point() +
+    geom_line() +
+    labs(title = "Annual Mean Temperature Trend in Mumbai (2015-2020)",
+         x = "Year",
+         y = "Mean Temperature (°C)") +
+    theme_minimal()
+
+# Precipitation Trend Plot for Mumbai
+ggplot(annual_trends_mumbai, aes(x = Year, y = Total_Prcp)) +
+    geom_point() +
+    geom_line() +
+    labs(title = "Annual Total Precipitation Trend in Mumbai (2015-2020)",
+         x = "Year",
+         y = "Total Precipitation (mm)") +
+    theme_minimal()
+
+# Annual trends for Rajasthan
+annual_trends_rajasthan <- rajasthan_df %>%
+                           group_by(Year = format(time, "%Y")) %>%
+                           summarise(Mean_Tavg = mean(tavg, na.rm = TRUE),
+                                     Total_Prcp = sum(prcp, na.rm = TRUE))
+
+# Temperature Trend Plot for Rajasthan
+ggplot(annual_trends_rajasthan, aes(x = Year, y = Mean_Tavg)) +
+    geom_point() +
+    geom_line() +
+    labs(title = "Annual Mean Temperature Trend in Rajasthan (2015-2020)",
+         x = "Year",
+         y = "Mean Temperature (°C)") +
+    theme_minimal()
+
+# Precipitation Trend Plot for Rajasthan
+ggplot(annual_trends_rajasthan, aes(x = Year, y = Total_Prcp)) +
+    geom_point() +
+    geom_line() +
+    labs(title = "Annual Total Precipitation Trend in Rajasthan (2015-2020)",
+         x = "Year",
+         y = "Total Precipitation (mm)") +
+    theme_minimal()
+
+# Reload the dataset
+bhubaneswar_df <- read.csv("d1/weather_Bhubhneshwar_1990_2022.csv")
+
+# Convert 'time' column to Date format (if not already done)
+bhubaneswar_df$time <- as.Date(bhubaneswar_df$time, format = "%Y-%m-%d")
+
+# Extract the year from the date and create a new column
+bhubaneswar_df$Year <- format(bhubaneswar_df$time, "%Y")
+
+# Convert the Year column to numeric
+bhubaneswar_df$Year <- as.numeric(bhubaneswar_df$Year)
+
+# Filter data for 2015-2020
+bhubaneswar_2015_2020 <- bhubaneswar_df %>%
+                         filter(Year >= 2015 & Year <= 2020)
+
+# View the first few rows
+head(bhubaneswar_2015_2020)
+
+# Annual trends for Bhubaneswar
+annual_trends_bhubaneswar <- bhubaneswar_2015_2020 %>%
+                             group_by(Year) %>%
+                             summarise(Mean_Tavg = mean(tavg, na.rm = TRUE),
+                                       Total_Prcp = sum(prcp, na.rm = TRUE))
+
+# Temperature Trend Plot for Bhubaneswar
+ggplot(annual_trends_bhubaneswar, aes(x = Year, y = Mean_Tavg)) +
+    geom_point() +
+    geom_line() +
+    labs(title = "Annual Mean Temperature Trend in Bhubaneswar (2015-2020)",
+         x = "Year",
+         y = "Mean Temperature (°C)") +
+    theme_minimal()
+
+# Precipitation Trend Plot for Bhubaneswar
+ggplot(annual_trends_bhubaneswar, aes(x = Year, y = Total_Prcp)) +
+    geom_point() +
+    geom_line() +
+    labs(title = "Annual Total Precipitation Trend in Bhubaneswar (2015-2020)",
+         x = "Year",
+         y = "Total Precipitation (mm)") +
+    theme_minimal()
+```
+
+# Comparative Analysis
+
+## Comparing Temperature Data
+
+In this section, we compare the average, minimum, and maximum temperatures among the different cities.
+
+### Average Temperature Comparison
+
+# Ensuring Consistent Structure for Datasets
+```{r}
+# Select and rename columns (if needed) for each city
+bangalore_df <- bangalore_df %>% select(time, tavg, tmin, tmax, prcp) %>% mutate(City = "Bangalore")
+chennai_df <- chennai_df %>% select(time, tavg, tmin, tmax, prcp) %>% mutate(City = "Chennai")
+delhi_df <- delhi_df %>% select(time, tavg, tmin, tmax, prcp) %>% mutate(City = "Delhi")
+lucknow_df <- lucknow_df %>% select(time, tavg, tmin, tmax, prcp) %>% mutate(City = "Lucknow")
+mumbai_df <- mumbai_df %>% select(time, tavg, tmin, tmax, prcp) %>% mutate(City = "Mumbai")
+rajasthan_df <- rajasthan_df %>% select(time, tavg, tmin, tmax, prcp) %>% mutate(City = "Rajasthan")
+bhubaneswar_df <- bhubaneswar_df %>% select(time, tavg, tmin, tmax, prcp) %>% mutate(City = "Bhubaneswar")
+rourkela_df <- rourkela_df %>% select(time, tavg, tmin, tmax, prcp) %>% mutate(City = "Rourkela")
+
+# Combine all city datasets into one dataframe
+all_cities_df <- rbind(bangalore_df, chennai_df, delhi_df, lucknow_df, mumbai_df, rajasthan_df, bhubaneswar_df, rourkela_df)
+
+# Boxplot for average temperatures
+ggplot(all_cities_df, aes(x = City, y = tavg, fill = City)) +
+  geom_boxplot() +
+  labs(title = "Comparison of Average Temperatures Across Cities",
+       x = "City",
+       y = "Average Temperature (°C)") +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+# Minimum Temperature Comparison
+
+```{r}
+# Boxplot for minimum temperatures
+ggplot(all_cities_df, aes(x = City, y = tmin, fill = City)) +
+  geom_boxplot() +
+  labs(title = "Comparison of Minimum Temperatures Across Cities",
+       x = "City",
+       y = "Minimum Temperature (°C)") +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+```
+# Maximum Temperature Comparison
+
+```{r}
+# Boxplot for maximum temperatures
+ggplot(all_cities_df, aes(x = City, y = tmax, fill = City)) +
+  geom_boxplot() +
+  labs(title = "Comparison of Maximum Temperatures Across Cities",
+       x = "City",
+       y = "Maximum Temperature (°C)") +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+```
+
+# Comparative Analysis: Precipitation Data Among Cities
+
+```{r precipitation-comparison}
+# Creating boxplots for precipitation data
+ggplot(all_cities_df, aes(x = City, y = prcp, fill = City)) +
+    geom_boxplot() +
+    labs(title = "Comparison of Precipitation Among Cities (2015-2020)",
+         x = "City",
+         y = "Precipitation (mm)") +
+    theme_minimal() +
+    theme(legend.position = "none")
+```
+## Year-Over-Year Climate Trends Across Cities
+```{r}
+
+# Calculate annual mean temperatures for each city
+annual_mean_temps <- all_cities_df %>%
+    group_by(City, Year = format(time, "%Y")) %>%
+    summarise(Mean_Tavg = mean(tavg, na.rm = TRUE))
+
+# Plotting the temperature trends
+ggplot(annual_mean_temps, aes(x = Year, y = Mean_Tavg, group = City, color = City)) +
+    geom_line() +
+    labs(title = "Year-Over-Year Mean Temperature Trends Across Cities (2015-2020)",
+         x = "Year",
+         y = "Mean Temperature (°C)") +
+    theme_minimal() +
+    theme(legend.position = "bottom")
+
+```
+
+#
+```{r temperature-trends-improved}
+# Plotting temperature trends with improved axis readability
+ggplot(annual_mean_temps, aes(x = Year, y = Mean_Tavg, group = City, color = City)) +
+    geom_line() +
+    labs(title = "Year-Over-Year Mean Temperature Trends Across Cities (2015-2020)",
+         x = "Year",
+         y = "Mean Temperature (°C)") +
+    theme_minimal() +
+    theme(legend.position = "bottom") +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) # Adjusting x-axis labels
+```
+
+```{r}
+# Calculate total annual precipitation for each city
+annual_precipitation <- all_cities_df %>%
+    group_by(City, Year = format(time, "%Y")) %>%
+    summarise(Total_Prcp = sum(prcp, na.rm = TRUE))
+
+# Base plot with line plot for temperatures
+p <- ggplot() +
+    geom_line(data = annual_mean_temps, aes(x = Year, y = Mean_Tavg, group = City, color = City)) +
+    labs(title = "Annual Mean Temperature and Total Precipitation Trends (2015-2020)",
+         x = "Year",
+         y = "Mean Temperature (°C)")
+
+# Adding the bar plot for precipitation
+p + geom_bar(data = annual_precipitation, aes(x = Year, y = Total_Prcp, fill = City), stat = "identity", position = "dodge", alpha = 0.5) +
+    scale_y_continuous(sec.axis = sec_axis(~ . / 10, name = "Total Precipitation (mm)")) # Adjust scale and axis label for precipitation
+
+# Base plot with line plot for temperatures
+p <- ggplot() +
+    geom_line(data = annual_mean_temps, aes(x = Year, y = Mean_Tavg, group = City, color = City)) +
+    labs(title = "Annual Mean Temperature and Total Precipitation Trends (2015-2020)",
+         x = "Year",
+         y = "Mean Temperature (°C)")
+
+# Adding the bar plot for precipitation
+p + geom_bar(data = annual_precipitation, aes(x = Year, y = Total_Prcp, fill = City), stat = "identity", position = "dodge", alpha = 0.5) +
+    scale_y_continuous(sec.axis = sec_axis(~ . / 10, name = "Total Precipitation (mm)")) +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) # Rotate x-axis labels
+
+
+```
+
+
+## Seasonal Variation Analysis
+
+### Analyzing Seasonal Changes in Temperature and Precipitation
+
+```{r seasonal-variation-analysis, message=FALSE}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(lubridate)
+
+# Function to assign seasons to months
+get_season <- function(month) {
+  case_when(
+    month %in% c(3, 4, 5) ~ "Spring",
+    month %in% c(6, 7, 8) ~ "Summer",
+    month %in% c(9, 10, 11) ~ "Autumn",
+    month %in% c(12, 1, 2) ~ "Winter"
+  )
+}
+
+# Adding a Season column to the dataset
+all_cities_df <- all_cities_df %>%
+  mutate(Month = month(time),
+         Season = get_season(Month))
+
+# Calculating seasonal mean temperature and total precipitation
+seasonal_stats <- all_cities_df %>%
+  group_by(City, Season) %>%
+  summarise(Mean_Tavg = mean(tavg, na.rm = TRUE),
+            Total_Prcp = sum(prcp, na.rm = TRUE), .groups = 'drop')
+
+# Plotting Seasonal Temperature Variations
+ggplot(seasonal_stats, aes(x = Season, y = Mean_Tavg, fill = City)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  labs(title = "Seasonal Mean Temperature Variations Across Cities",
+       x = "Season",
+       y = "Mean Temperature (°C)") +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+
+# Plotting Seasonal Precipitation Variations
+ggplot(seasonal_stats, aes(x = Season, y = Total_Prcp, fill = City)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  labs(title = "Seasonal Total Precipitation Variations Across Cities",
+       x = "Season",
+       y = "Total Precipitation (mm)") +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+
+```
+
+## Correlation Analysis Between Temperature and Precipitation
+
+### Investigating the Relationship Between Average Temperature and Total Precipitation
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(GGally)
+library(DT)
+
+# Calculating annual mean temperature and total precipitation for each city
+annual_climate_data <- all_cities_df %>%
+  group_by(City, Year = format(time, "%Y")) %>%
+  summarise(Mean_Tavg = mean(tavg, na.rm = TRUE),
+            Total_Prcp = sum(prcp, na.rm = TRUE), .groups = 'drop')
+
+# Enhanced Correlation Plot
+ggpairs(annual_climate_data, columns = c("Mean_Tavg", "Total_Prcp"), ggplot2::aes(colour = City)) +
+  labs(title = "Enhanced Correlation Matrix Between Mean Temperature and Total Precipitation Across Cities")
+
+# Interactive Table of Correlations
+annual_climate_data %>%
+  group_by(City) %>%
+  summarise(Correlation = cor(Mean_Tavg, Total_Prcp, use = "complete.obs")) %>%
+  datatable(options = list(pageLength = 10))
+
+
+
+```
+
+# Extreme Weather Events Analysis
+
+1. Setting Thresholds
+First, define what constitutes an "extreme" event. This might vary based on the city and the type of event (temperature, rainfall, etc.).
+
+For example, you might consider a day with a temperature above the 95th percentile as extremely hot, or a day with rainfall above the 95th percentile as a day of heavy rainfall.
+
+```{r}
+# Define thresholds for extreme events
+temperature_threshold <- quantile(all_cities_df$tavg, 0.95, na.rm = TRUE)
+rainfall_threshold <- quantile(all_cities_df$prcp, 0.95, na.rm = TRUE)
+
+# Identify extreme temperature events
+all_cities_df$extreme_temp <- all_cities_df$tavg > temperature_threshold
+
+# Identify extreme rainfall events
+all_cities_df$extreme_rain <- all_cities_df$prcp > rainfall_threshold
+
+
+# Analyze extreme temperature events
+extreme_temp_analysis <- all_cities_df %>%
+    group_by(Year = format(time, "%Y"), City) %>%
+    summarise(Extreme_Temp_Days = sum(extreme_temp, na.rm = TRUE))
+
+# Analyze extreme rainfall events
+extreme_rain_analysis <- all_cities_df %>%
+    group_by(Year = format(time, "%Y"), City) %>%
+    summarise(Extreme_Rain_Days = sum(extreme_rain, na.rm = TRUE))
+
+# Plotting extreme temperature trends
+ggplot(extreme_temp_analysis, aes(x = Year, y = Extreme_Temp_Days, group = City, color = City)) +
+    geom_line() +
+    labs(title = "Yearly Trends of Extreme Temperature Days",
+         x = "Year",
+         y = "Number of Extreme Temperature Days")
+
+# Plotting extreme rainfall trends
+ggplot(extreme_rain_analysis, aes(x = Year, y = Extreme_Rain_Days, group = City, color = City)) +
+    geom_line() +
+    labs(title = "Yearly Trends of Extreme Rainfall Days",
+         x = "Year",
+         y = "Number of Extreme Rainfall Days")
+
+```
+
+# Impact of Extreme Weather Events on Specific Months
+
+```{r}
+library(dplyr)
+library(lubridate)
+
+# Extract the month from the date
+all_cities_df$Month <- format(as.Date(all_cities_df$time), "%m")
+all_cities_df$Month <- as.integer(all_cities_df$Month)
+
+# Monthly analysis of extreme temperature events
+monthly_extreme_temp <- all_cities_df %>%
+    group_by(Month, City) %>%
+    summarise(Extreme_Temp_Days = sum(extreme_temp, na.rm = TRUE))
+
+# Monthly analysis of extreme rainfall events
+monthly_extreme_rain <- all_cities_df %>%
+    group_by(Month, City) %>%
+    summarise(Extreme_Rain_Days = sum(extreme_rain, na.rm = TRUE))
+
+
+# Plotting monthly extreme temperature trends
+ggplot(monthly_extreme_temp, aes(x = Month, y = Extreme_Temp_Days, fill = City)) +
+    geom_bar(stat = "identity", position = position_dodge()) +
+    labs(title = "Monthly Distribution of Extreme Temperature Days",
+         x = "Month",
+         y = "Number of Extreme Temperature Days") +
+    scale_x_continuous(breaks = 1:12, labels = month.abb)
+
+# Plotting monthly extreme rainfall trends
+ggplot(monthly_extreme_rain, aes(x = Month, y = Extreme_Rain_Days, fill = City)) +
+    geom_bar(stat = "identity", position = position_dodge()) +
+    labs(title = "Monthly Distribution of Extreme Rainfall Days",
+         x = "Month",
+         y = "Number of Extreme Rainfall Days") +
+    scale_x_continuous(breaks = 1:12, labels = month.abb)
+
+```
+
+# Long-Term Climate Change Trends Analysis
+
+```{r}
+# Prepare the data for long-term trend analysis
+# Ensure all datasets have a Year column
+
+# Add Year column to each city's dataset
+bangalore_df$Year <- format(bangalore_df$time, "%Y")
+chennai_df$Year <- format(chennai_df$time, "%Y")
+delhi_df$Year <- format(delhi_df$time, "%Y")
+lucknow_df$Year <- format(lucknow_df$time, "%Y")
+mumbai_df$Year <- format(mumbai_df$time, "%Y")
+rajasthan_df$Year <- format(rajasthan_df$time, "%Y")
+bhubaneswar_df$Year <- format(bhubaneswar_df$time, "%Y")
+rourkela_df$Year <- format(rourkela_df$time, "%Y")
+
+# Combine all datasets into one dataframe
+all_cities_df <- rbind(
+    bangalore_df %>% mutate(City = "Bangalore"),
+    chennai_df %>% mutate(City = "Chennai"),
+    delhi_df %>% mutate(City = "Delhi"),
+    lucknow_df %>% mutate(City = "Lucknow"),
+    mumbai_df %>% mutate(City = "Mumbai"),
+    rajasthan_df %>% mutate(City = "Rajasthan"),
+    bhubaneswar_df %>% mutate(City = "Bhubaneswar"),
+    rourkela_df %>% mutate(City = "Rourkela")
+)
+all_cities_long_term <- all_cities_df %>%
+    mutate(Year = as.numeric(Year),
+           Decade = case_when(
+               Year >= 1990 & Year < 2000 ~ "1990s",
+               Year >= 2000 & Year < 2010 ~ "2000s",
+               Year >= 2010 & Year <= 2022 ~ "2010s"
+           ))
+
+# Decadal temperature trends
+decadal_temp_trends <- all_cities_long_term %>%
+    group_by(City, Decade) %>%
+    summarise(Mean_Tavg = mean(tavg, na.rm = TRUE))
+
+# Decadal precipitation trends
+decadal_precip_trends <- all_cities_long_term %>%
+    group_by(City, Decade) %>%
+    summarise(Total_Prcp = sum(prcp, na.rm = TRUE))
+
+# Temperature trend plot
+ggplot(decadal_temp_trends, aes(x = Decade, y = Mean_Tavg, fill = City)) +
+    geom_bar(stat = "identity", position = position_dodge()) +
+    labs(title = "Decadal Average Temperature Trends",
+         x = "Decade",
+         y = "Mean Temperature (°C)")
+
+# Precipitation trend plot
+ggplot(decadal_precip_trends, aes(x = Decade, y = Total_Prcp, fill = City)) +
+    geom_bar(stat = "identity", position = position_dodge()) +
+    labs(title = "Decadal Total Precipitation Trends",
+         x = "Decade",
+         y = "Total Precipitation (mm)")
+
+```
+
+#  Analysis and Interpretation
+
+Temperature Trends: Look for upward or downward trends in average temperatures across decades. An increasing trend might indicate warming.
+Precipitation Trends: Analyze changes in total precipitation over the decades. Changes might indicate shifting patterns in rainfall.
+5. Additional Considerations
+Variability Between Cities: Different cities may show different trends due to their geographic and climatic differences.
+Limitations: Remember that while this analysis can indicate trends, it doesn't prove causation. Climatic changes are influenced by a multitude of factors.
+By comparing decadal averages and totals, you can get a snapshot of how climate parameters have evolved over the past 30 years, offering insights into potential long-term climate change trends.

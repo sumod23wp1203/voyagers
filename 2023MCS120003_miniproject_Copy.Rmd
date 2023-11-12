@@ -1,0 +1,88 @@
+---
+title: "2023MCS120003_miniproject"
+author: "Sumod Sethumadhavan"
+date: "11/11/2023"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r}
+# [Load Libraries]
+library(dplyr)
+library(ggplot2)
+
+# [Load and preprocess datasets for each city]
+# Note: Repeat the following steps for each city (Bangalore, Chennai, Delhi, etc.)
+# Example for Bangalore:
+bangalore_df <- read.csv("d1/Bangalore_1990_2022_BangaloreCity.csv")
+bangalore_df$time <- as.Date(bangalore_df$time, format = "%d-%m-%Y")
+bangalore_df <- bangalore_df %>%
+                filter(format(time, "%Y") >= "2015" & format(time, "%Y") <= "2020")
+
+# [Handle missing values]
+# Note: Repeat for each city
+bangalore_df <- bangalore_df %>%
+                mutate(tavg = ifelse(is.na(tavg), mean(tavg, na.rm = TRUE), tavg),
+                       tmin = ifelse(is.na(tmin), mean(tmin, na.rm = TRUE), tmin),
+                       tmax = ifelse(is.na(tmax), mean(tmax, na.rm = TRUE), tmax),
+                       prcp = ifelse(is.na(prcp), mean(prcp, na.rm = TRUE), prcp))
+
+```
+
+# Summary Statistics
+##The summary statistics provide insights into the average, median, and standard deviation of temperature and precipitation for each city.
+```{r}
+# [Calculate summary statistics for each city]
+# Example for Bangalore:
+summary_stats_bangalore <- bangalore_df %>%
+                           summarise(Mean_Tavg = mean(tavg, na.rm = TRUE),
+                                     Median_Tavg = median(tavg, na.rm = TRUE),
+                                     SD_Tavg = sd(tavg, na.rm = TRUE),
+                                     Mean_Prcp = mean(prcp, na.rm = TRUE),
+                                     Median_Prcp = median(prcp, na.rm = TRUE),
+                                     SD_Prcp = sd(prcp, na.rm = TRUE))
+summary_stats_bangalore
+
+```
+#Trend Analysis
+
+##The trend analysis examines changes in average temperature and total precipitation over the years 2015 ##to 2020 for each city.
+```{r}
+# [Function to calculate annual trends]
+calculate_annual_trends <- function(df) {
+  df %>% 
+    group_by(Year = format(time, "%Y")) %>%
+    summarise(Mean_Tavg = mean(tavg, na.rm = TRUE),
+              Total_Prcp = sum(prcp, na.rm = TRUE))
+}
+
+# [Trend analysis for each city]
+# Example for Bangalore:
+annual_trends_bangalore <- calculate_annual_trends(bangalore_df)
+
+# [Plotting trends]
+# Temperature Trend Plot for Bangalore
+ggplot(annual_trends_bangalore, aes(x = Year, y = Mean_Tavg)) +
+    geom_point() +
+    geom_line() +
+    labs(title = "Annual Mean Temperature Trend in Bangalore (2015-2020)",
+         x = "Year",
+         y = "Mean Temperature (°C)") +
+    theme_minimal()
+
+# Precipitation Trend Plot for Bangalore
+ggplot(annual_trends_bangalore, aes(x = Year, y = Total_Prcp)) +
+    geom_point() +
+    geom_line() +
+    labs(title = "Annual Total Precipitation Trend in Bangalore (2015-2020)",
+         x = "Year",
+         y = "Total Precipitation (mm)") +
+    theme_minimal()
+
+```
+
