@@ -1,0 +1,1710 @@
+---
+title: "2023MCS120003_miniproject"
+author: "Sumod Sethumadhavan"
+date: "17/11/2023"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# Project Report: Analysis of Air Quality and Climatic Trends in India
+
+## Introduction
+In this study, we investigate the interplay between air quality and climate in India, focusing on key pollutants and meteorological patterns. Our analysis, grounded in comprehensive datasets spanning several years and cities, aims to elucidate the distribution of air pollutants, such as ozone, particulate matter, and nitrogen dioxide, and their correlation with climatic variables like temperature and rainfall. Through this exploration, we seek to understand the dynamics of environmental quality and its implications for health and well-being. The project's core objective is to provide a nuanced understanding of environmental conditions in India, offering insights valuable for policy development and environmental management.
+ 
+
+## Objectives
+
+The objectives of this mini-project encompass a comprehensive analysis of air quality, climatic trends, and rainfall prediction across various cities in India. This endeavor is multi-faceted, aiming not only to assess and compare current conditions but also to predict future trends. The objectives can be broadly categorized as follows:
+
+#### Analyzing Trends of Data
+   - **Air Quality Index (AQI) Analysis:**
+     - Assess the variation of AQI across different cities, seasons, and regions in India.
+     - Examine the annual variation in pollutant concentrations in select cities to identify trends and outliers.
+   - **Temperature Analysis:**
+     - Investigate the variation of average, minimum, and maximum temperatures across cities and different elevations.
+     - Compare temperature data among cities to identify similar patterns or unique trends.
+   - **Precipitation Analysis:**
+     - Explore the variation in precipitation across cities and different elevations.
+     - Analyze annual or monthly precipitation levels and compare them across the cities.
+
+#### Comparative Analysis
+   - **Temperature Data Comparison:**
+     - Use statistical tools and visualizations (like boxplots) to compare temperature distributions across cities.
+   - **Precipitation Data Comparison:**
+     - Employ bar charts or line graphs to compare precipitation levels and identify wetter and drier cities.
+   - **Seasonal Variations:**
+     - Examine seasonal changes in temperature and precipitation and compare these across cities.
+   - **Extreme Weather Events:**
+     - Identify and analyze unusual climatic events, discussing potential causes such as climate change.
+   - **Visualizations and Statistical Analysis:**
+     - Leverage a variety of plots and statistical tests to effectively convey and validate the comparative analysis.
+
+### Overview of Datasets for Data Exploration
+
+#### Air Quality Dataset
+
+| Dataset Name         | Description                                                           | Time Period  | Coverage                       | Frequency         | Parameters                                |
+|----------------------|-----------------------------------------------------------------------|--------------|--------------------------------|-------------------|-------------------------------------------|
+| **City Level Data**  | Data for major cities in India                                        | 2015 to 2020 | 18 major cities in India       | Daily and hourly  | PM2.5, PM10, NO2, SO2, CO, O3, AQI        |
+| **Station Level Data** | Localized air quality measurements at various stations within cities | -            | Multiple stations within cities| Hourly and daily  | Similar to city level data                |
+
+####  Weather Dataset
+
+| Dataset Name            | Description                         | Time Period  | Coverage                  | Frequency | Parameters                           |
+|-------------------------|-------------------------------------|--------------|---------------------------|-----------|--------------------------------------|
+| **General Weather Data** | Weather data for major Indian cities| 1990 to 2022 | 8 major cities in India   | Daily     | Min, max, average temperatures, precipitation |
+
+#### Specific Weather Dataset Files
+
+| File Name                                | Description                               | Time Period  | Coverage                   | Frequency | Parameters                            |
+|------------------------------------------|-------------------------------------------|--------------|----------------------------|-----------|---------------------------------------|
+| weather_Rourkela.csv                     | Weather data for Rourkela                 | 2021 to 2022 | Rourkela                   | Daily     | Temperature, precipitation            |
+| weather_Bhubaneshwar.csv                 | Weather data for Bhubaneshwar             | 1990 to 2022 | Bhubaneshwar               | Hourly    | Temperature, precipitation            |
+| Rajasthan_1990_2022.csv                  | Weather data for Jodhpur                  | 1990 to 2022 | Jodhpur                    | Daily     | Temperature, precipitation            |
+| Mumbai_1990_2022_Santacruz.csv           | Weather data for Santacruz (Mumbai)       | 1990 to 2022 | Santacruz, Mumbai          | Daily     | Temperature, precipitation            |
+| Lucknow_1990_2022.csv                    | Weather data for Lucknow                  | 1990 to 2022 | Lucknow                    | Hourly    | Temperature, precipitation            |
+| Delhi_NCR_1990_2022_Safdarjung.csv       | Weather data for Safdarjung (Delhi)       | 1990 to 2022 | Safdarjung, Delhi          | Daily     | Temperature, precipitation            |
+| Chennai_1990_2022_Madras.csv             | Weather data for Chennai                  | 1990 to 2022 | Chennai                    | Daily     | Temperature, precipitation            |
+| Bangalore_1990_2022_BangaloreCity.csv    | Weather data for Bangalore                | 1990 to 2022 | Bangalore                  | Hourly    | Temperature, precipitation            |
+| Station_GeoLocation_Longitude_Latitude_Elevation | Geographical characteristics of stations | -            | Stations in various cities | -         | Longitude, latitude, elevation         |
+
+####  External Data Source
+
+- **Indian Cities Dataset from Kaggle (@indian-cities-kaggle)**: Provides latitude and longitude information for cities in the primary dataset.
+
+### Predictive Modeling
+   - **AQI Prediction:**
+     - Develop a predictive model to forecast the AQI of a city based on historical air quality and weather data.
+     - Utilize relevant machine learning techniques to enhance the accuracy and reliability of the predictions.
+   - **Rainfall Prediction:**
+     - Create a model to predict rainfall patterns and intensity in different cities, using historical weather data.
+     - Apply advanced forecasting methods to provide accurate and timely rainfall predictions.
+
+#### Reporting and Further Research
+   - **Summarization and Insight Generation:**
+     - Present findings in a clear, concise manner, highlighting key insights and unexpected results.
+   - **Recommendations for Future Work:**
+     - Suggest areas for further research and discuss the implications of findings for policy-making, urban planning, agriculture, public health, and other relevant sectors.
+
+This  objective aims to provide a holistic understanding of air quality, climatic conditions, and rainfall patterns in India, drawing on comprehensive data analysis, comparative studies, and predictive modeling. The insights gained will be crucial for informing environmental policies, urban planning, and public health strategies.
+
+####### ***End of Objective***
+
+---
+***
+
+## Preliminary Analysis
+
+In this section, we delve into the preliminary analysis of both the climate and air quality datasets. This includes our initial findings, data cleaning steps, and basic data explorations. The analysis begins with climate data, followed by air quality data, to provide a comprehensive overview.
+
+#### Climate Data Analysis
+- **Initial Observations:**
+  - Briefly describe the initial observations made from the climate dataset. This may include patterns, anomalies, or general trends noted in temperature and precipitation data across different cities.
+- **Data Cleaning Steps:**
+  - Detail the steps taken to clean and preprocess the climate data. This might include handling missing values, correcting anomalies, normalizing data, or any other transformations applied.
+  - Explain the rationale behind each step and how it aids in ensuring data accuracy and reliability.
+- **Basic Explorations:**
+  - Present the initial explorations conducted on the climate data. This could involve:
+    - Descriptive statistics to understand the distribution of temperature and precipitation.
+    - Simple visualizations like line graphs or histograms to illustrate basic trends and patterns.
+    - Comparison of temperature and precipitation data across different cities and time frames.
+
+#### Air Quality Data Analysis
+- **Initial Observations:**
+  - Summarize the early findings from the air quality dataset. Highlight the noticeable trends in AQI and pollutant concentrations across different cities and periods.
+- **Data Cleaning Steps:**
+  - Discuss the procedures implemented to clean the air quality dataset. This may include filtering out irrelevant data, handling outliers, smoothing noisy data, etc.
+  - Justify these steps and their importance in ensuring data quality.
+- **Basic Explorations:**
+  - Share the preliminary analysis conducted on the air quality data. This could include:
+    - Descriptive analysis of AQI and pollutants across different cities and times.
+    - Initial graphical representations, such as bar charts or scatter plots, to show AQI trends and pollutant levels.
+    - Early comparison of air quality across different cities and environmental conditions.
+
+This preliminary analysis sets the stage for more in-depth investigations into both climate and air quality datasets, laying the groundwork for further statistical analysis, comparative studies, and predictive modeling.
+
+### Experiments with Data. 
+
+```{r,  include=FALSE, echo=FALSE, error=FALSE, warning=FALSE}
+library(tidyr)
+library(dplyr)
+library(leaflet)
+library(ggplot2)
+library(forcats)
+library(readr)
+library(lubridate)
+
+aqi_city_day<-read_csv("d2/city_day.csv")
+aqi_city_hour<-read_csv("d2/city_hour.csv")
+aqi_stnt_day<-read_csv("d2/station_day.csv")
+aqi_stnt_hour<-read_csv("d2/station_hour.csv")
+aqi_stnts<-read_csv("d2/stations.csv")
+```
+
+```{r include=FALSE, echo=FALSE, error=FALSE, warning=FALSE}
+aqi_city_day$City <-as_factor(aqi_city_day$City)
+aqi_city_day$AQI_Bucket <-as_factor(aqi_city_day$AQI_Bucket)
+aqi_city_day%>%nrow()
+str(aqi_city_day$City)
+str(aqi_city_day$AQI_Bucket)
+```
+
+```{r}
+# Loading the datasets
+
+# Bangalore
+bangalore_df <- read.csv("d1/Bangalore_1990_2022_BangaloreCity.csv")
+
+# Chennai
+chennai_df <- read.csv("d1/Chennai_1990_2022_Madras.csv")
+
+# Delhi
+delhi_df <- read.csv("d1/Delhi_NCR_1990_2022_Safdarjung.csv")
+
+# Lucknow
+lucknow_df <- read.csv("d1/Lucknow_1990_2022.csv")
+
+# Mumbai
+mumbai_df <- read.csv("d1/Mumbai_1990_2022_Santacruz.csv")
+
+# Rajasthan (Jodhpur)
+rajasthan_df <- read.csv("d1/Rajasthan_1990_2022_Jodhpur.csv")
+
+# Bhubaneswar
+bhubaneswar_df <- read.csv("d1/weather_Bhubhneshwar_1990_2022.csv")
+
+# Rourkela
+rourkela_df <- read.csv("d1/weather_Rourkela_2021_2022.csv")
+
+# Load the Station GeoLocation data
+station_geo_df <- read.csv("d1/Station_GeoLocation_Longitute_Latitude_Elevation_EPSG_4326.csv")
+
+# Preprocessing the Bangalore dataset
+library(dplyr)
+
+```
+
+
+```{r}
+# Convert date column to Date format
+bangalore_df$time <- as.Date(bangalore_df$time, format = "%d-%m-%Y")
+
+# Filter data for 2015-2020
+bangalore_df <- bangalore_df %>%
+                filter(format(time, "%Y") >= "2015" & format(time, "%Y") <= "2020")
+
+
+#chennai
+chennai_df$time <- as.Date(chennai_df$time, format = "%d-%m-%Y")
+chennai_df <- chennai_df %>%
+              filter(format(time, "%Y") >= "2015" & format(time, "%Y") <= "2020")
+
+#Delhi
+delhi_df$time <- as.Date(delhi_df$time, format = "%d-%m-%Y")
+delhi_df <- delhi_df %>%
+            filter(format(time, "%Y") >= "2015" & format(time, "%Y") <= "2020")
+
+#Lucknow
+lucknow_df$time <- as.Date(lucknow_df$time, format = "%d-%m-%Y")
+lucknow_df <- lucknow_df %>%
+              filter(format(time, "%Y") >= "2015" & format(time, "%Y") <= "2020")
+
+#MUmbai
+mumbai_df$time <- as.Date(mumbai_df$time, format = "%d-%m-%Y")
+mumbai_df <- mumbai_df %>%
+              filter(format(time, "%Y") >= "2015" & format(time, "%Y") <= "2020")
+
+#rajasthan
+rajasthan_df$time <- as.Date(rajasthan_df$time, format = "%d-%m-%Y")
+rajasthan_df <- rajasthan_df %>%
+                filter(format(time, "%Y") >= "2015" & format(time, "%Y") <= "2020")
+
+#bhub
+bhubaneswar_df$time <- as.Date(bhubaneswar_df$time, format = "%d-%m-%Y")
+bhubaneswar_df <- bhubaneswar_df %>%
+                  filter(format(time, "%Y") >= "2015" & format(time, "%Y") <= "2020")
+
+#rourkela
+rourkela_df$time <- as.Date(rourkela_df$time, format = "%d-%m-%Y")
+rourkela_df <- rourkela_df %>%
+               filter(format(time, "%Y") >= "2015" & format(time, "%Y") <= "2020")
+
+# Handling missing values in Bangalore dataset
+bangalore_df <- bangalore_df %>%
+                mutate(tavg = ifelse(is.na(tavg), mean(tavg, na.rm = TRUE), tavg),
+                       tmin = ifelse(is.na(tmin), mean(tmin, na.rm = TRUE), tmin),
+                       tmax = ifelse(is.na(tmax), mean(tmax, na.rm = TRUE), tmax),
+                       prcp = ifelse(is.na(prcp), mean(prcp, na.rm = TRUE), prcp))
+
+# Chennai
+chennai_df <- chennai_df %>%
+              mutate(tavg = ifelse(is.na(tavg), mean(tavg, na.rm = TRUE), tavg),
+                     tmin = ifelse(is.na(tmin), mean(tmin, na.rm = TRUE), tmin),
+                     tmax = ifelse(is.na(tmax), mean(tmax, na.rm = TRUE), tmax),
+                     prcp = ifelse(is.na(prcp), mean(prcp, na.rm = TRUE), prcp))
+
+#Delhi
+
+delhi_df <- delhi_df %>%
+            mutate(tavg = ifelse(is.na(tavg), mean(tavg, na.rm = TRUE), tavg),
+                   tmin = ifelse(is.na(tmin), mean(tmin, na.rm = TRUE), tmin),
+                   tmax = ifelse(is.na(tmax), mean(tmax, na.rm = TRUE), tmax),
+                   prcp = ifelse(is.na(prcp), mean(prcp, na.rm = TRUE), prcp))
+
+# Lucknow
+lucknow_df <- lucknow_df %>%
+              mutate(tavg = ifelse(is.na(tavg), mean(tavg, na.rm = TRUE), tavg),
+                     tmin = ifelse(is.na(tmin), mean(tmin, na.rm = TRUE), tmin),
+                     tmax = ifelse(is.na(tmax), mean(tmax, na.rm = TRUE), tmax),
+                     prcp = ifelse(is.na(prcp), mean(prcp, na.rm = TRUE), prcp))
+
+#Mumbai Dataset
+mumbai_df <- mumbai_df %>%
+             mutate(tavg = ifelse(is.na(tavg), mean(tavg, na.rm = TRUE), tavg),
+                    tmin = ifelse(is.na(tmin), mean(tmin, na.rm = TRUE), tmin),
+                    tmax = ifelse(is.na(tmax), mean(tmax, na.rm = TRUE), tmax),
+                    prcp = ifelse(is.na(prcp), mean(prcp, na.rm = TRUE), prcp))
+
+#rajasthan
+rajasthan_df <- rajasthan_df %>%
+                mutate(tavg = ifelse(is.na(tavg), mean(tavg, na.rm = TRUE), tavg),
+                       tmin = ifelse(is.na(tmin), mean(tmin, na.rm = TRUE), tmin),
+                       tmax = ifelse(is.na(tmax), mean(tmax, na.rm = TRUE), tmax),
+                       prcp = ifelse(is.na(prcp), mean(prcp, na.rm = TRUE), prcp))
+
+#bhub
+bhubaneswar_df <- bhubaneswar_df %>%
+                  mutate(tavg = ifelse(is.na(tavg), mean(tavg, na.rm = TRUE), tavg),
+                         tmin = ifelse(is.na(tmin), mean(tmin, na.rm = TRUE), tmin),
+                         tmax = ifelse(is.na(tmax), mean(tmax, na.rm = TRUE), tmax),
+                         prcp = ifelse(is.na(prcp), mean(prcp, na.rm = TRUE), prcp))
+
+#rourkela
+rourkela_df <- rourkela_df %>%
+               mutate(tavg = ifelse(is.na(tavg), mean(tavg, na.rm = TRUE), tavg),
+                      tmin = ifelse(is.na(tmin), mean(tmin, na.rm = TRUE), tmin),
+                      tmax = ifelse(is.na(tmax), mean(tmax, na.rm = TRUE), tmax),
+                      prcp = ifelse(is.na(prcp), mean(prcp, na.rm = TRUE), prcp))
+
+```
+
+#### Summary Statistics:
+
+```{r}
+# Example for Bangalore
+summary_stats_bangalore <- bangalore_df %>%
+                           summarise(Mean_Tavg = mean(tavg, na.rm = TRUE),
+                                     Median_Tavg = median(tavg, na.rm = TRUE),
+                                     SD_Tavg = sd(tavg, na.rm = TRUE),
+                                     Mean_Prcp = mean(prcp, na.rm = TRUE),
+                                     Median_Prcp = median(prcp, na.rm = TRUE),
+                                     SD_Prcp = sd(prcp, na.rm = TRUE))
+
+summary_stats_bangalore
+#chennai
+
+summary_stats_chennai <- chennai_df %>%
+                         summarise(Mean_Tavg = mean(tavg, na.rm = TRUE),
+                                   Median_Tavg = median(tavg, na.rm = TRUE),
+                                   SD_Tavg = sd(tavg, na.rm = TRUE),
+                                   Mean_Prcp = mean(prcp, na.rm = TRUE),
+                                   Median_Prcp = median(prcp, na.rm = TRUE),
+                                   SD_Prcp = sd(prcp, na.rm = TRUE))
+
+# Delhi
+summary_stats_delhi <- delhi_df %>%
+                       summarise(Mean_Tavg = mean(tavg, na.rm = TRUE),
+                                 Median_Tavg = median(tavg, na.rm = TRUE),
+                                 SD_Tavg = sd(tavg, na.rm = TRUE),
+                                 Mean_Prcp = mean(prcp, na.rm = TRUE),
+                                 Median_Prcp = median(prcp, na.rm = TRUE),
+                                 SD_Prcp = sd(prcp, na.rm = TRUE))
+
+#Lucknow
+summary_stats_lucknow <- lucknow_df %>%
+                         summarise(Mean_Tavg = mean(tavg, na.rm = TRUE),
+                                   Median_Tavg = median(tavg, na.rm = TRUE),
+                                   SD_Tavg = sd(tavg, na.rm = TRUE),
+                                   Mean_Prcp = mean(prcp, na.rm = TRUE),
+                                   Median_Prcp = median(prcp, na.rm = TRUE),
+                                   SD_Prcp = sd(prcp, na.rm = TRUE))
+#Mumbai
+summary_stats_mumbai <- mumbai_df %>%
+                        summarise(Mean_Tavg = mean(tavg, na.rm = TRUE),
+                                  Median_Tavg = median(tavg, na.rm = TRUE),
+                                  SD_Tavg = sd(tavg, na.rm = TRUE),
+                                  Mean_Prcp = mean(prcp, na.rm = TRUE),
+                                  Median_Prcp = median(prcp, na.rm = TRUE),
+                                  SD_Prcp = sd(prcp, na.rm = TRUE))
+
+#Rajasthan
+summary_stats_rajasthan <- rajasthan_df %>%
+                           summarise(Mean_Tavg = mean(tavg, na.rm = TRUE),
+                                     Median_Tavg = median(tavg, na.rm = TRUE),
+                                     SD_Tavg = sd(tavg, na.rm = TRUE),
+                                     Mean_Prcp = mean(prcp, na.rm = TRUE),
+                                     Median_Prcp = median(prcp, na.rm = TRUE),
+                                     SD_Prcp = sd(prcp, na.rm = TRUE))
+
+#Bhubaneshwar
+summary_stats_bhubaneswar <- bhubaneswar_df %>%
+                             summarise(Mean_Tavg = mean(tavg, na.rm = TRUE),
+                                       Median_Tavg = median(tavg, na.rm = TRUE),
+                                       SD_Tavg = sd(tavg, na.rm = TRUE),
+                                       Mean_Prcp = mean(prcp, na.rm = TRUE),
+                                       Median_Prcp = median(prcp, na.rm = TRUE),
+                                       SD_Prcp = sd(prcp, na.rm = TRUE))
+#Rourkela
+summary_stats_rourkela <- rourkela_df %>%
+                          summarise(Mean_Tavg = mean(tavg, na.rm = TRUE),
+                                    Median_Tavg = median(tavg, na.rm = TRUE),
+                                    SD_Tavg = sd(tavg, na.rm = TRUE),
+                                    Mean_Prcp = mean(prcp, na.rm = TRUE),
+                                    Median_Prcp = median(prcp, na.rm = TRUE),
+                                    SD_Prcp = sd(prcp, na.rm = TRUE))
+
+
+```
+
+### Exploring the Air Quality across cities
+
+```{r}
+aqi_city_day$City <-as_factor(aqi_city_day$City)
+aqi_city_day$AQI_Bucket <-as_factor(aqi_city_day$AQI_Bucket)
+aqi_city_day%>%nrow()
+str(aqi_city_day$City)
+str(aqi_city_day$AQI_Bucket)
+aqi_city_day%>%summary()
+
+#City Hour
+
+aqi_city_hour$City <-as_factor(aqi_city_hour$City)
+aqi_city_hour$AQI_Bucket <-as_factor(aqi_city_hour$AQI_Bucket)
+str(aqi_city_hour$City)
+str(aqi_city_hour$AQI_Bucket)
+aqi_city_hour%>%nrow()
+aqi_city_hour%>%summary()
+
+#Preliminary exploration of stnt_day data
+#Convert the stationId and AQI_Bucket into factors
+aqi_stnts$StationId <- as_factor(aqi_stnts$StationId)
+aqi_stnts$City <- as_factor(aqi_stnts$City)
+aqi_stnts$State <- as_factor(aqi_stnts$State)
+aqi_stnts$Status <- as_factor(aqi_stnts$Status)
+
+str(aqi_stnts$StationId)
+str(aqi_stnts$City)
+str(aqi_stnts$State)
+
+aqi_stnts %>% nrow()
+aqi_stnts %>% summary()
+
+```
+
+
+
+```{r, include=FALSE, echo=FALSE, error=FALSE, warning=FALSE}
+library(tidyr)
+library(dplyr)
+library(leaflet)
+library(ggplot2)
+library(forcats)
+library(readr)
+library(lubridate)
+
+aqi_city_day<-read_csv("d2/city_day.csv")
+aqi_city_hour<-read_csv("d2/city_hour.csv")
+aqi_stnt_day<-read_csv("d2/station_day.csv")
+aqi_stnt_hour<-read_csv("d2/station_hour.csv")
+aqi_stnts<-read_csv("d2/stations.csv")
+
+
+indian_cities <-read_csv("d1/Indian Cities Database.csv")
+```
+
+#### City by Day
+
+```{r}
+# Preliminary exploration of city_day data
+# Convert the city and AQI_Bucket into factors
+aqi_city_day$City <-as_factor(aqi_city_day$City)
+aqi_city_day$AQI_Bucket <-as_factor(aqi_city_day$AQI_Bucket)
+aqi_city_day%>%nrow()
+str(aqi_city_day$City)
+str(aqi_city_day$AQI_Bucket)
+aqi_city_day%>%summary()
+
+```
+
+
+#### City by Hour
+```{r}
+# Preliminary exploration of city_hour data
+# Convert the city and AQI_Bucket into factors
+aqi_city_hour$City <-as_factor(aqi_city_hour$City)
+aqi_city_hour$AQI_Bucket <-as_factor(aqi_city_hour$AQI_Bucket)
+str(aqi_city_hour$City)
+str(aqi_city_hour$AQI_Bucket)
+aqi_city_hour%>%nrow()
+aqi_city_hour%>%summary()
+
+```
+
+
+#### Station By Day
+```{r }
+
+#Preliminary exploration of stnt_day data
+#Convert the stationId and AQI_Bucket into factors
+aqi_stnt_day$StationId <-as_factor(aqi_stnt_day$StationId)
+aqi_stnt_day$AQI_Bucket <-as_factor(aqi_stnt_day$AQI_Bucket)
+
+str(aqi_stnt_day$StationId)
+str(aqi_stnt_day$AQI_Bucket)
+
+aqi_stnt_day%>%nrow()
+aqi_stnt_day%>%summary()
+```
+
+
+#### Station By Hour
+
+```{r}
+
+#Preliminary exploration of stnt_day data
+#Convert the stationId and AQI_Bucket into factors
+aqi_stnt_hour$StationId <-as_factor(aqi_stnt_hour$StationId)
+aqi_stnt_hour$AQI_Bucket <-as_factor(aqi_stnt_hour$AQI_Bucket)
+
+str(aqi_stnt_hour$StationId)
+str(aqi_stnt_hour$AQI_Bucket)
+
+aqi_stnt_hour%>%nrow()
+aqi_stnt_hour%>%summary()
+
+```
+
+
+```{r,include=FALSE, echo=FALSE, error=FALSE, warning=FALSE}
+rourkela <- read_csv("d1/weather_Rourkela_2021_2022.csv")
+bhubhneshwar <- read_csv("d1/weather_Bhubhneshwar_1990_2022.csv")
+jodhpur <- read_csv("d1/Rajasthan_1990_2022_Jodhpur.csv")
+mumbai <- read_csv("d1/Mumbai_1990_2022_Santacruz.csv")
+lucknow <- read_csv("d1/Lucknow_1990_2022.csv")
+delhi <- read_csv("d1/Delhi_NCR_1990_2022_Safdarjung.csv")
+chennai <- read_csv("d1/Chennai_1990_2022_Madras.csv")
+bangalore <- read_csv("d1/Bangalore_1990_2022_BangaloreCity.csv")
+geolocations<-read_csv("d1/Station_GeoLocation_Longitute_Latitude_Elevation_EPSG_4326.csv")
+
+
+
+
+
+# Preliminary exploration of Rourkela data
+# Convert the date into Date.
+rourkela$time <- as_date(rourkela$time, format = '%d-%m-%Y')
+rourkela <- rourkela %>% mutate(Month = month(time))
+rourkela <- rourkela %>% mutate(Year = year(time))
+
+rourkela%>%nrow()
+rourkela%>%summary()
+
+
+
+
+
+# Preliminary exploration of Bhubhneshwar data
+# Convert the date into Date.
+bhubhneshwar$time <- as_date(bhubhneshwar$time, format = '%d-%m-%Y')
+bhubhneshwar <- bhubhneshwar %>% mutate(Month = month(time))
+bhubhneshwar <- bhubhneshwar %>% mutate(Year = year(time))
+
+bhubhneshwar%>%nrow()
+bhubhneshwar%>%summary()
+
+
+
+
+
+# Preliminary exploration of Jodhpur data
+# Convert the date into Date.
+jodhpur$time <- as_date(jodhpur$time, format = '%d-%m-%Y')
+jodhpur <- jodhpur %>% mutate(Month = month(time))
+jodhpur <- jodhpur %>% mutate(Year = year(time))
+
+jodhpur%>%nrow()
+jodhpur%>%summary()
+
+
+
+
+
+# Preliminary exploration of Mumbai data
+# Convert the date into Date.
+mumbai$time <- as_date(mumbai$time, format = '%d-%m-%Y')
+mumbai <- mumbai %>% mutate(Month = month(time))
+mumbai <- mumbai %>% mutate(Year = year(time))
+
+mumbai%>%nrow()
+mumbai%>%summary()
+
+
+
+
+
+
+lucknow$time <- as_date(lucknow$time,  format = '%d-%m-%Y')
+lucknow <- lucknow %>% mutate(Month = month(time))
+lucknow <- lucknow %>% mutate(Year = year(time))
+
+lucknow%>%nrow()
+lucknow%>%summary()
+
+
+
+
+
+
+# Preliminary exploration of Delhi data
+# Convert the date into Date.
+delhi$time <- as_date(delhi$time, format = '%d-%m-%Y')
+delhi<- delhi %>% mutate(Month = month(time))
+delhi <- delhi %>% mutate(Year = year(time))
+
+delhi%>%nrow()
+delhi%>%summary()
+
+
+
+
+
+
+# Preliminary exploration of Chennai data
+# Convert the date into Date.
+chennai$time <- as_date(chennai$time, format = '%d-%m-%Y')
+chennai<- chennai %>% mutate(Month = month(time))
+chennai <- chennai %>% mutate(Year = year(time))
+
+chennai%>%nrow()
+chennai%>%summary()
+
+
+bangalore$time <- as_date(bangalore$time, format = '%d-%m-%Y')
+bangalore<- bangalore %>% mutate(Month = month(time))
+bangalore <- bangalore %>% mutate(Year = year(time))
+
+bangalore%>%nrow()
+bangalore%>%summary()
+
+# Preliminary exploration of GeoLocations data
+# Convert the Location_Name into factors
+geolocations$Location_Name <- as_factor(geolocations$Location_Name)
+geolocations%>%nrow()
+geolocations%>%summary()
+
+```
+
+
+## Discussion on Premilinary Analysis.
+
+### Temperature & Precipitation Dataset
+
+### 1. Structural Variations
+- Data from Rourkela and Bhubhaneswar includes additional fields such as wind direction, wind speed, and snow.
+- This necessitates different handling methods for comparative analysis.
+
+### 2. Data Range Inconsistencies
+- Most cities have data from 1990-2022, but Rourkela's data is only for 2021, and Bhubhaneswar's data goes up to September 2022.
+- Range filtering will be required for a uniform time-scale analysis.
+
+### 3. Missing Elevation Data
+- Elevation data for Bhubhaneswar and Rourkela is missing in the geolocations table.
+
+### AQI Dataset
+
+#### 1. Factorization of AQI_Bucket
+- The `AQI_Bucket` has been categorized into six levels: Good, Satisfactory, Moderate, Poor, Very Poor, and Severe.
+- This categorization is consistent across `city_day`, `city_hour`, `station_day`, and `station_hour` datasets.
+
+#### 2. Measured Particulate Matter
+- The datasets measure AQI based on 12 particulate matter types: PM2.5, PM10, NO, NO2, NOx, NH3, CO, SO2, O3, Benzene, Toluene, and Xylene.
+- Consistent measurement across all tables facilitates comprehensive air quality analysis.
+
+#### 3. Consistency in City and StationId Coverage
+- The same 26 cities are covered in `city_day` and `city_hour` datasets.
+- `Station_day` and `station_hour` datasets are consistent with 110 station IDs each.
+
+#### 4. Relation between AQI and AQI_Bucket
+- If AQI data is missing, the `AQI_Bucket` is also NA, indicating no further data cleaning is needed for these fields in terms of their interrelation.
+
+#### 5. Mismatch in Number of Stations
+- The `stations` table includes 230 stations, more than the 110 in `station_day` and `station_hour` datasets.
+- This indicates that `station_day` and `station_hour` datasets include data from a subset of stations.
+
+##### Next Steps
+
+- **Exploratory Data Analysis (EDA)**: 
+  - Further exploration of datasets to identify trends, patterns, and anomalies.
+  - Examining temporal (daily vs. hourly) and spatial (city-wise and station-wise) AQI trends.
+
+- **Correlation Analysis**: 
+  - Investigating the correlation between `city_day` and `station_day` datasets.
+  - Exploring the impact of environmental factors like temperature and precipitation on AQI.
+
+- **Data Filtering and Normalization**: 
+  - Applying filters and normalization techniques for structural differences and data range inconsistencies in the temperature and precipitation dataset.
+
+The focus will be on uncovering insights into air quality trends and their temporal and spatial dynamics, along with the influence of environmental factors.
+
+## 5 Detailed Analysis: Data Exploration and Processing
+
+In this section, we focus on preprocessing and analyzing the Temperature & Precipitation dataset to discern climatic trends across various Indian cities. Key steps include merging geographic data (latitude, longitude, elevation) and consolidating data from individual cities into one comprehensive dataframe. We enhance the dataset with temporal features (month, year), geographical classifications (Coastal/Non-Coastal regions based on elevation), and seasonal categories (Summer, Winter, Rainy). Additionally, we identify day types (weekdays/weekends) and integrate city information, transforming the City field into a factor.
+
+The processing extends to merging each city's dataset with geolocation data, followed by combining these into a single merged_weather dataframe. We classify cities into Coastal or Non-Coastal regions and clean the data by removing rows with missing values in key columns. For a more granular analysis, we compute monthly averages of temperature and precipitation across different years.
+
+Our analysis includes visualizations and trend examinations of annual precipitation and temperature across cities. We observe general trends like increasing precipitation since 2004 and rising temperatures, particularly in Delhi and Lucknow. The analysis also reveals distinct climatic differences between Coastal and Non-Coastal cities, with Coastal regions exhibiting higher temperatures and precipitation levels. This comprehensive exploration provides valuable insights into the geographical impact on climate patterns, highlighting significant variances in temperature and precipitation across different regions.
+
+### Trend Analysis
+
+#### Temperature and Precipitation Trends Over Time
+```{r}
+library(ggplot2)
+
+# Function to calculate annual trends
+calculate_annual_trends <- function(df) {
+  df %>% 
+    group_by(Year = format(time, "%Y")) %>%
+    summarise(Mean_Tavg = mean(tavg, na.rm = TRUE),
+              Total_Prcp = sum(prcp, na.rm = TRUE))
+}
+
+annual_trends_bangalore <- bangalore_df %>%
+                           group_by(Year = format(time, "%Y")) %>%
+                           summarise(Mean_Tavg = mean(tavg, na.rm = TRUE),
+                                     Total_Prcp = sum(prcp, na.rm = TRUE))
+
+# Temperature Trend Plot for Bangalore
+ggplot(annual_trends_bangalore, aes(x = Year, y = Mean_Tavg)) +
+    geom_point() +
+    geom_line() +
+    labs(title = "Annual Mean Temperature Trend in Bangalore (2015-2020)",
+         x = "Year",
+         y = "Mean Temperature (°C)") +
+    theme_minimal()
+
+# Precipitation Trend Plot for Bangalore
+ggplot(annual_trends_bangalore, aes(x = Year, y = Total_Prcp)) +
+    geom_point() +
+    geom_line() +
+    labs(title = "Annual Total Precipitation Trend in Bangalore (2015-2020)",
+         x = "Year",
+         y = "Total Precipitation (mm)") +
+    theme_minimal()
+
+# Annual trends for Chennai
+annual_trends_chennai <- chennai_df %>%
+                         group_by(Year = format(time, "%Y")) %>%
+                         summarise(Mean_Tavg = mean(tavg, na.rm = TRUE),
+                                   Total_Prcp = sum(prcp, na.rm = TRUE))
+
+# Temperature Trend Plot for Chennai
+ggplot(annual_trends_chennai, aes(x = Year, y = Mean_Tavg)) +
+    geom_point() +
+    geom_line() +
+    labs(title = "Annual Mean Temperature Trend in Chennai (2015-2020)",
+         x = "Year",
+         y = "Mean Temperature (°C)") +
+    theme_minimal()
+
+# Precipitation Trend Plot for Chennai
+ggplot(annual_trends_chennai, aes(x = Year, y = Total_Prcp)) +
+    geom_point() +
+    geom_line() +
+    labs(title = "Annual Total Precipitation Trend in Chennai (2015-2020)",
+         x = "Year",
+         y = "Total Precipitation (mm)") +
+    theme_minimal()
+
+
+# Annual trends for Delhi
+annual_trends_delhi <- delhi_df %>%
+                       group_by(Year = format(time, "%Y")) %>%
+                       summarise(Mean_Tavg = mean(tavg, na.rm = TRUE),
+                                 Total_Prcp = sum(prcp, na.rm = TRUE))
+
+# Temperature Trend Plot for Delhi
+ggplot(annual_trends_delhi, aes(x = Year, y = Mean_Tavg)) +
+    geom_point() +
+    geom_line() +
+    labs(title = "Annual Mean Temperature Trend in Delhi (2015-2020)",
+         x = "Year",
+         y = "Mean Temperature (°C)") +
+    theme_minimal()
+
+
+# Precipitation Trend Plot for Delhi
+ggplot(annual_trends_delhi, aes(x = Year, y = Total_Prcp)) +
+    geom_point() +
+    geom_line() +
+    labs(title = "Annual Total Precipitation Trend in Delhi (2015-2020)",
+         x = "Year",
+         y = "Total Precipitation (mm)") +
+    theme_minimal()
+
+# Annual trends for Lucknow
+annual_trends_lucknow <- lucknow_df %>%
+                         group_by(Year = format(time, "%Y")) %>%
+                         summarise(Mean_Tavg = mean(tavg, na.rm = TRUE),
+                                   Total_Prcp = sum(prcp, na.rm = TRUE))
+
+# Temperature Trend Plot for Lucknow
+ggplot(annual_trends_lucknow, aes(x = Year, y = Mean_Tavg)) +
+    geom_point() +
+    geom_line() +
+    labs(title = "Annual Mean Temperature Trend in Lucknow (2015-2020)",
+         x = "Year",
+         y = "Mean Temperature (°C)") +
+    theme_minimal()
+
+# Precipitation Trend Plot for Lucknow
+ggplot(annual_trends_lucknow, aes(x = Year, y = Total_Prcp)) +
+    geom_point() +
+    geom_line() +
+    labs(title = "Annual Total Precipitation Trend in Lucknow (2015-2020)",
+         x = "Year",
+         y = "Total Precipitation (mm)") +
+    theme_minimal()
+
+# Annual trends for Mumbai
+annual_trends_mumbai <- mumbai_df %>%
+                        group_by(Year = format(time, "%Y")) %>%
+                        summarise(Mean_Tavg = mean(tavg, na.rm = TRUE),
+                                  Total_Prcp = sum(prcp, na.rm = TRUE))
+
+# Temperature Trend Plot for Mumbai
+ggplot(annual_trends_mumbai, aes(x = Year, y = Mean_Tavg)) +
+    geom_point() +
+    geom_line() +
+    labs(title = "Annual Mean Temperature Trend in Mumbai (2015-2020)",
+         x = "Year",
+         y = "Mean Temperature (°C)") +
+    theme_minimal()
+
+# Precipitation Trend Plot for Mumbai
+ggplot(annual_trends_mumbai, aes(x = Year, y = Total_Prcp)) +
+    geom_point() +
+    geom_line() +
+    labs(title = "Annual Total Precipitation Trend in Mumbai (2015-2020)",
+         x = "Year",
+         y = "Total Precipitation (mm)") +
+    theme_minimal()
+
+# Annual trends for Rajasthan
+annual_trends_rajasthan <- rajasthan_df %>%
+                           group_by(Year = format(time, "%Y")) %>%
+                           summarise(Mean_Tavg = mean(tavg, na.rm = TRUE),
+                                     Total_Prcp = sum(prcp, na.rm = TRUE))
+
+# Temperature Trend Plot for Rajasthan
+ggplot(annual_trends_rajasthan, aes(x = Year, y = Mean_Tavg)) +
+    geom_point() +
+    geom_line() +
+    labs(title = "Annual Mean Temperature Trend in Rajasthan (2015-2020)",
+         x = "Year",
+         y = "Mean Temperature (°C)") +
+    theme_minimal()
+
+
+# Precipitation Trend Plot for Rajasthan
+ggplot(annual_trends_rajasthan, aes(x = Year, y = Total_Prcp)) +
+    geom_point() +
+    geom_line() +
+    labs(title = "Annual Total Precipitation Trend in Rajasthan (2015-2020)",
+         x = "Year",
+         y = "Total Precipitation (mm)") +
+    theme_minimal()
+```
+
+
+
+```{r,include=FALSE, echo=FALSE, error=FALSE, warning=FALSE}
+# Reload the dataset
+bhubaneswar_df <- read.csv("d1/weather_Bhubhneshwar_1990_2022.csv")
+
+# Convert 'time' column to Date format (if not already done)
+bhubaneswar_df$time <- as.Date(bhubaneswar_df$time, format = "%Y-%m-%d")
+
+# Extract the year from the date and create a new column
+bhubaneswar_df$Year <- format(bhubaneswar_df$time, "%Y")
+
+# Convert the Year column to numeric
+bhubaneswar_df$Year <- as.numeric(bhubaneswar_df$Year)
+
+# Filter data for 2015-2020
+bhubaneswar_2015_2020 <- bhubaneswar_df %>%
+                         filter(Year >= 2015 & Year <= 2020)
+```
+
+```{r,include=FALSE, echo=FALSE, error=FALSE, warning=FALSE}
+# View the first few rows
+head(bhubaneswar_2015_2020)
+
+# Annual trends for Bhubaneswar
+annual_trends_bhubaneswar <- bhubaneswar_2015_2020 %>%
+                             group_by(Year) %>%
+                             summarise(Mean_Tavg = mean(tavg, na.rm = TRUE),
+                                       Total_Prcp = sum(prcp, na.rm = TRUE))
+
+# Temperature Trend Plot for Bhubaneswar
+ggplot(annual_trends_bhubaneswar, aes(x = Year, y = Mean_Tavg)) +
+    geom_point() +
+    geom_line() +
+    labs(title = "Annual Mean Temperature Trend in Bhubaneswar (2015-2020)",
+         x = "Year",
+         y = "Mean Temperature (°C)") +
+    theme_minimal()
+
+# Precipitation Trend Plot for Bhubaneswar
+ggplot(annual_trends_bhubaneswar, aes(x = Year, y = Total_Prcp)) +
+    geom_point() +
+    geom_line() +
+    labs(title = "Annual Total Precipitation Trend in Bhubaneswar (2015-2020)",
+         x = "Year",
+         y = "Total Precipitation (mm)") +
+    theme_minimal()
+```
+
+### Comparative Analysis
+
+```{r}
+# Select and rename columns (if needed) for each city
+bangalore_df <- bangalore_df %>% select(time, tavg, tmin, tmax, prcp) %>% mutate(City = "Bangalore")
+chennai_df <- chennai_df %>% select(time, tavg, tmin, tmax, prcp) %>% mutate(City = "Chennai")
+delhi_df <- delhi_df %>% select(time, tavg, tmin, tmax, prcp) %>% mutate(City = "Delhi")
+lucknow_df <- lucknow_df %>% select(time, tavg, tmin, tmax, prcp) %>% mutate(City = "Lucknow")
+mumbai_df <- mumbai_df %>% select(time, tavg, tmin, tmax, prcp) %>% mutate(City = "Mumbai")
+rajasthan_df <- rajasthan_df %>% select(time, tavg, tmin, tmax, prcp) %>% mutate(City = "Rajasthan")
+bhubaneswar_df <- bhubaneswar_df %>% select(time, tavg, tmin, tmax, prcp) %>% mutate(City = "Bhubaneswar")
+rourkela_df <- rourkela_df %>% select(time, tavg, tmin, tmax, prcp) %>% mutate(City = "Rourkela")
+
+# Combine all city datasets into one dataframe
+all_cities_df <- rbind(bangalore_df, chennai_df, delhi_df, lucknow_df, mumbai_df, rajasthan_df, bhubaneswar_df, rourkela_df)
+
+# Boxplot for average temperatures
+ggplot(all_cities_df, aes(x = City, y = tavg, fill = City)) +
+  geom_boxplot() +
+  labs(title = "Comparison of Average Temperatures Across Cities",
+       x = "City",
+       y = "Average Temperature (°C)") +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+
+```{r}
+# Boxplot for minimum temperatures
+ggplot(all_cities_df, aes(x = City, y = tmin, fill = City)) +
+  geom_boxplot() +
+  labs(title = "Comparison of Minimum Temperatures Across Cities",
+       x = "City",
+       y = "Minimum Temperature (°C)") +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+```
+### Maximum Temperature Comparison
+
+```{r}
+# Boxplot for maximum temperatures
+ggplot(all_cities_df, aes(x = City, y = tmax, fill = City)) +
+  geom_boxplot() +
+  labs(title = "Comparison of Maximum Temperatures Across Cities",
+       x = "City",
+       y = "Maximum Temperature (°C)") +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+```
+
+### Comparative Analysis: Precipitation Data Among Cities
+
+```{r precipitation-comparison}
+# Creating boxplots for precipitation data
+ggplot(all_cities_df, aes(x = City, y = prcp, fill = City)) +
+    geom_boxplot() +
+    labs(title = "Comparison of Precipitation Among Cities (2015-2020)",
+         x = "City",
+         y = "Precipitation (mm)") +
+    theme_minimal() +
+    theme(legend.position = "none")
+```
+
+### Year-Over-Year Climate Trends Across Cities
+
+```{r}
+
+# Calculate annual mean temperatures for each city
+annual_mean_temps <- all_cities_df %>%
+    group_by(City, Year = format(time, "%Y")) %>%
+    summarise(Mean_Tavg = mean(tavg, na.rm = TRUE))
+
+# Plotting the temperature trends
+ggplot(annual_mean_temps, aes(x = Year, y = Mean_Tavg, group = City, color = City)) +
+    geom_line() +
+    labs(title = "Year-Over-Year Mean Temperature Trends Across Cities (2015-2020)",
+         x = "Year",
+         y = "Mean Temperature (°C)") +
+    theme_minimal() +
+    theme(legend.position = "bottom")
+
+```
+
+
+```{r temperature-trends-improved}
+# Plotting temperature trends with improved axis readability
+ggplot(annual_mean_temps, aes(x = Year, y = Mean_Tavg, group = City, color = City)) +
+    geom_line() +
+    labs(title = "Year-Over-Year Mean Temperature Trends Across Cities (2015-2020)",
+         x = "Year",
+         y = "Mean Temperature (°C)") +
+    theme_minimal() +
+    theme(legend.position = "bottom") +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) # Adjusting x-axis labels
+```
+
+```{r}
+# Calculate total annual precipitation for each city
+annual_precipitation <- all_cities_df %>%
+    group_by(City, Year = format(time, "%Y")) %>%
+    summarise(Total_Prcp = sum(prcp, na.rm = TRUE))
+
+# Base plot with line plot for temperatures
+p <- ggplot() +
+    geom_line(data = annual_mean_temps, aes(x = Year, y = Mean_Tavg, group = City, color = City)) +
+    labs(title = "Annual Mean Temperature and Total Precipitation Trends (2015-2020)",
+         x = "Year",
+         y = "Mean Temperature (°C)")
+
+# Adding the bar plot for precipitation
+p + geom_bar(data = annual_precipitation, aes(x = Year, y = Total_Prcp, fill = City), stat = "identity", position = "dodge", alpha = 0.5) +
+    scale_y_continuous(sec.axis = sec_axis(~ . / 10, name = "Total Precipitation (mm)")) # Adjust scale and axis label for precipitation
+
+# Base plot with line plot for temperatures
+p <- ggplot() +
+    geom_line(data = annual_mean_temps, aes(x = Year, y = Mean_Tavg, group = City, color = City)) +
+    labs(title = "Annual Mean Temperature and Total Precipitation Trends (2015-2020)",
+         x = "Year",
+         y = "Mean Temperature (°C)")
+
+```
+
+
+### Seasonal Variation Analysis
+
+#### Analyzing Seasonal Changes in Temperature and Precipitation
+
+```{r seasonal-variation-analysis, message=FALSE}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(lubridate)
+
+# Function to assign seasons to months
+get_season <- function(month) {
+  case_when(
+    month %in% c(3, 4, 5) ~ "Spring",
+    month %in% c(6, 7, 8) ~ "Summer",
+    month %in% c(9, 10, 11) ~ "Autumn",
+    month %in% c(12, 1, 2) ~ "Winter"
+  )
+}
+
+# Adding a Season column to the dataset
+all_cities_df <- all_cities_df %>%
+  mutate(Month = month(time),
+         Season = get_season(Month))
+
+# Calculating seasonal mean temperature and total precipitation
+seasonal_stats <- all_cities_df %>%
+  group_by(City, Season) %>%
+  summarise(Mean_Tavg = mean(tavg, na.rm = TRUE),
+            Total_Prcp = sum(prcp, na.rm = TRUE), .groups = 'drop')
+
+# Plotting Seasonal Temperature Variations
+ggplot(seasonal_stats, aes(x = Season, y = Mean_Tavg, fill = City)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  labs(title = "Seasonal Mean Temperature Variations Across Cities",
+       x = "Season",
+       y = "Mean Temperature (°C)") +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+
+# Plotting Seasonal Precipitation Variations
+ggplot(seasonal_stats, aes(x = Season, y = Total_Prcp, fill = City)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  labs(title = "Seasonal Total Precipitation Variations Across Cities",
+       x = "Season",
+       y = "Total Precipitation (mm)") +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+
+```
+
+### Correlation Analysis Between Temperature and Precipitation
+
+#### Investigating the Relationship Between Average Temperature and Total Precipitation
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(GGally)
+library(DT)
+
+# Calculating annual mean temperature and total precipitation for each city
+annual_climate_data <- all_cities_df %>%
+  group_by(City, Year = format(time, "%Y")) %>%
+  summarise(Mean_Tavg = mean(tavg, na.rm = TRUE),
+            Total_Prcp = sum(prcp, na.rm = TRUE), .groups = 'drop')
+
+# Enhanced Correlation Plot
+ggpairs(annual_climate_data, columns = c("Mean_Tavg", "Total_Prcp"), ggplot2::aes(colour = City)) +
+  labs(title = "Enhanced Correlation Matrix Between Mean Temperature and Total Precipitation Across Cities")
+
+# Interactive Table of Correlations
+annual_climate_data %>%
+  group_by(City) %>%
+  summarise(Correlation = cor(Mean_Tavg, Total_Prcp, use = "complete.obs")) %>%
+  datatable(options = list(pageLength = 10))
+
+
+
+```
+
+
+### Extreme Weather Events Analysis
+
+#### Setting Thresholds
+First, define what constitutes an "extreme" event. This might vary based on the city and the type of event (temperature, rainfall, etc.).
+
+For example, you might consider a day with a temperature above the 95th percentile as extremely hot, or a day with rainfall above the 95th percentile as a day of heavy rainfall.
+
+```{r}
+# Define thresholds for extreme events
+temperature_threshold <- quantile(all_cities_df$tavg, 0.95, na.rm = TRUE)
+rainfall_threshold <- quantile(all_cities_df$prcp, 0.95, na.rm = TRUE)
+
+# Identify extreme temperature events
+all_cities_df$extreme_temp <- all_cities_df$tavg > temperature_threshold
+
+# Identify extreme rainfall events
+all_cities_df$extreme_rain <- all_cities_df$prcp > rainfall_threshold
+
+
+# Analyze extreme temperature events
+extreme_temp_analysis <- all_cities_df %>%
+    group_by(Year = format(time, "%Y"), City) %>%
+    summarise(Extreme_Temp_Days = sum(extreme_temp, na.rm = TRUE))
+
+# Analyze extreme rainfall events
+extreme_rain_analysis <- all_cities_df %>%
+    group_by(Year = format(time, "%Y"), City) %>%
+    summarise(Extreme_Rain_Days = sum(extreme_rain, na.rm = TRUE))
+
+# Plotting extreme temperature trends
+ggplot(extreme_temp_analysis, aes(x = Year, y = Extreme_Temp_Days, group = City, color = City)) +
+    geom_line() +
+    labs(title = "Yearly Trends of Extreme Temperature Days",
+         x = "Year",
+         y = "Number of Extreme Temperature Days")
+
+# Plotting extreme rainfall trends
+ggplot(extreme_rain_analysis, aes(x = Year, y = Extreme_Rain_Days, group = City, color = City)) +
+    geom_line() +
+    labs(title = "Yearly Trends of Extreme Rainfall Days",
+         x = "Year",
+         y = "Number of Extreme Rainfall Days")
+
+```
+
+### Impact of Extreme Weather Events on Specific Months
+
+```{r}
+library(dplyr)
+library(lubridate)
+
+# Extract the month from the date
+all_cities_df$Month <- format(as.Date(all_cities_df$time), "%m")
+all_cities_df$Month <- as.integer(all_cities_df$Month)
+
+# Monthly analysis of extreme temperature events
+monthly_extreme_temp <- all_cities_df %>%
+    group_by(Month, City) %>%
+    summarise(Extreme_Temp_Days = sum(extreme_temp, na.rm = TRUE))
+
+# Monthly analysis of extreme rainfall events
+monthly_extreme_rain <- all_cities_df %>%
+    group_by(Month, City) %>%
+    summarise(Extreme_Rain_Days = sum(extreme_rain, na.rm = TRUE))
+
+
+# Plotting monthly extreme temperature trends
+ggplot(monthly_extreme_temp, aes(x = Month, y = Extreme_Temp_Days, fill = City)) +
+    geom_bar(stat = "identity", position = position_dodge()) +
+    labs(title = "Monthly Distribution of Extreme Temperature Days",
+         x = "Month",
+         y = "Number of Extreme Temperature Days") +
+    scale_x_continuous(breaks = 1:12, labels = month.abb)
+
+# Plotting monthly extreme rainfall trends
+ggplot(monthly_extreme_rain, aes(x = Month, y = Extreme_Rain_Days, fill = City)) +
+    geom_bar(stat = "identity", position = position_dodge()) +
+    labs(title = "Monthly Distribution of Extreme Rainfall Days",
+         x = "Month",
+         y = "Number of Extreme Rainfall Days") +
+    scale_x_continuous(breaks = 1:12, labels = month.abb)
+
+```
+
+### Long-Term Climate Change Trends Analysis
+
+```{r}
+# Prepare the data for long-term trend analysis
+# Ensure all datasets have a Year column
+
+# Add Year column to each city's dataset
+bangalore_df$Year <- format(bangalore_df$time, "%Y")
+chennai_df$Year <- format(chennai_df$time, "%Y")
+delhi_df$Year <- format(delhi_df$time, "%Y")
+lucknow_df$Year <- format(lucknow_df$time, "%Y")
+mumbai_df$Year <- format(mumbai_df$time, "%Y")
+rajasthan_df$Year <- format(rajasthan_df$time, "%Y")
+bhubaneswar_df$Year <- format(bhubaneswar_df$time, "%Y")
+rourkela_df$Year <- format(rourkela_df$time, "%Y")
+
+# Combine all datasets into one dataframe
+all_cities_df <- rbind(
+    bangalore_df %>% mutate(City = "Bangalore"),
+    chennai_df %>% mutate(City = "Chennai"),
+    delhi_df %>% mutate(City = "Delhi"),
+    lucknow_df %>% mutate(City = "Lucknow"),
+    mumbai_df %>% mutate(City = "Mumbai"),
+    rajasthan_df %>% mutate(City = "Rajasthan"),
+    bhubaneswar_df %>% mutate(City = "Bhubaneswar"),
+    rourkela_df %>% mutate(City = "Rourkela")
+)
+all_cities_long_term <- all_cities_df %>%
+    mutate(Year = as.numeric(Year),
+           Decade = case_when(
+               Year >= 1990 & Year < 2000 ~ "1990s",
+               Year >= 2000 & Year < 2010 ~ "2000s",
+               Year >= 2010 & Year <= 2022 ~ "2010s"
+           ))
+
+# Decadal temperature trends
+decadal_temp_trends <- all_cities_long_term %>%
+    group_by(City, Decade) %>%
+    summarise(Mean_Tavg = mean(tavg, na.rm = TRUE))
+
+# Decadal precipitation trends
+decadal_precip_trends <- all_cities_long_term %>%
+    group_by(City, Decade) %>%
+    summarise(Total_Prcp = sum(prcp, na.rm = TRUE))
+
+# Temperature trend plot
+ggplot(decadal_temp_trends, aes(x = Decade, y = Mean_Tavg, fill = City)) +
+    geom_bar(stat = "identity", position = position_dodge()) +
+    labs(title = "Decadal Average Temperature Trends",
+         x = "Decade",
+         y = "Mean Temperature (°C)")
+
+# Precipitation trend plot
+ggplot(decadal_precip_trends, aes(x = Decade, y = Total_Prcp, fill = City)) +
+    geom_bar(stat = "identity", position = position_dodge()) +
+    labs(title = "Decadal Total Precipitation Trends",
+         x = "Decade",
+         y = "Total Precipitation (mm)")
+
+```
+
+
+
+
+### Concise Summary: Analysis and Interpretation of Climate Trends
+
+In this phase, we analyze temperature and precipitation trends to identify long-term climatic changes. We scrutinize average temperatures across decades for any upward or downward trends, with an increasing trend possibly indicating global warming. Similarly, we examine precipitation patterns over the years to detect any shifts in rainfall. This analysis spans different cities, accounting for their unique geographic and climatic characteristics. It's important to note, however, that these trends suggest potential changes but don't confirm causation, as climate change is driven by various complex factors. Through this method, we aim to capture an overarching view of how climate parameters have shifted over the past three decades, shedding light on broader trends in climate change.
+
+### Feature Engineering for Rainfall Prediction - Exploration
+
+```{r}
+# Example using Bangalore's data
+
+# Creating new features based on the date
+bangalore_df <- bangalore_df %>%
+                mutate(Month = format(time, "%m"),
+                       Day = format(time, "%d"),
+                       DayOfYear = yday(time))
+
+# Removing the original 'time' column
+bangalore_df <- select(bangalore_df, -time)
+
+
+# Splitting the data into training and testing sets
+# Assuming 80% training, 20% testing split
+
+set.seed(123) # For reproducibility
+training_indices <- sample(1:nrow(bangalore_df), 0.8 * nrow(bangalore_df))
+
+train_data <- bangalore_df[training_indices, ]
+test_data <- bangalore_df[-training_indices, ]
+
+library(randomForest)
+
+# Using Random Forest for rainfall prediction
+rf_model <- randomForest(prcp ~ ., data = train_data)
+
+# Summarizing the model
+print(rf_model)
+
+
+# Making predictions on the test data
+predictions <- predict(rf_model, test_data)
+
+# Using Mean Absolute Error (MAE) for evaluation
+mae <- mean(abs(predictions - test_data$prcp))
+print(paste("Mean Absolute Error: ", mae))
+
+```
+
+#### Interpretation of the Results:
+Mean of Squared Residuals: This is about 80.49, which gives a sense of the average squared difference between the observed actual outcomes and the values predicted by the model.
+
+####  Percentage of Variance Explained: 
+The model explains around 9.4% of the variance in the rainfall data. This is relatively low, suggesting that the model might not be capturing all the complexities and patterns in the rainfall data.
+
+#### Mean Absolute Error (MAE):
+An MAE of 3.80 suggests that, on average, the model's predictions are about 3.80 units (presumably millimeters if the rainfall is measured that way) away from the actual values.
+
+### Predictive Modeling with Decision Trees
+
+#### Building a Decision Tree Model for Rainfall Prediction
+
+```{r decision-tree-model}
+library(rpart)
+
+# Building the decision tree model
+dt_model <- rpart(prcp ~ ., data = train_data, method = "anova")
+
+# Printing the model
+print(dt_model)
+
+# Making predictions on the test data
+predictions_dt <- predict(dt_model, test_data)
+
+# Using Mean Absolute Error (MAE) for evaluation
+mae_dt <- mean(abs(predictions_dt - test_data$prcp))
+print(paste("Mean Absolute Error: ", mae_dt))
+
+# Additional evaluation metrics - Root Mean Square Error (RMSE)
+rmse_dt <- sqrt(mean((predictions_dt - test_data$prcp)^2))
+print(paste("Root Mean Square Error: ", rmse_dt))
+
+library(rpart.plot)
+
+# Plotting the decision tree
+rpart.plot(dt_model, main = "Decision Tree for Rainfall Prediction")
+
+
+# Enhanced plotting of the decision tree
+rpart.plot(dt_model, 
+           main = "Decision Tree for Rainfall Prediction", 
+           type = 4,   # Enhanced tree type with split labels, variable names, and fitted values
+           extra = 101, # Display the number of observations in each node
+           under = TRUE, # Place node labels under the node (instead of inside it)
+           faclen = 0,   # Full factor levels in split labels
+           cex = 0.6,    # Size of text
+           tweak = 1.2)  # Adjust size and spacing for a cleaner look
+
+
+```
+
+### Geospatial Analysis:
+
+```{r}
+
+library(leaflet)
+
+# Ensure the column names are correctly referenced
+station_geo_df$Latitude <- as.numeric(station_geo_df$Latitude)
+station_geo_df$longitude <- as.numeric(station_geo_df$longitude)
+
+# Create a leaflet map
+leaflet(station_geo_df) %>% 
+  addTiles() %>% 
+  addMarkers(~longitude, ~Latitude, popup = ~Location_Name)
+
+# Creating a color palette
+pal <- colorNumeric(palette = "viridis", domain = station_geo_df$Elevation)
+
+leaflet(station_geo_df) %>% 
+  addTiles() %>% 
+  addCircleMarkers(~longitude, ~Latitude, 
+                   popup = ~paste(Location_Name, "Elevation:", Elevation, "m"),
+                   color = ~pal(Elevation), fill = TRUE)
+
+
+library(leaflet)
+library(leaflet.extras)
+
+# Calculating average rainfall for each city
+average_rainfall <- all_cities_df %>%
+  group_by(City) %>%
+  summarise(Avg_Rainfall = mean(prcp, na.rm = TRUE))
+
+# Merging with station_geo_df to include geographic coordinates
+station_geo_df <- merge(station_geo_df, average_rainfall, by.x = "Location_Name", by.y = "City")
+
+average_rainfall 
+
+leaflet(station_geo_df) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addHeatmap(lng = ~longitude, lat = ~Latitude, intensity = ~Avg_Rainfall, radius = 20, blur = 15)
+
+```
+
+
+### Integrating Air Quality and Weather Data with Geospatial Insights
+This section focuses on the seamless integration of air quality and weather data, enriched with geospatial coordinates and detailed city profiles. By blending these diverse datasets, we create a comprehensive perspective that not only assesses environmental parameters but also considers the geographical context of Indian cities. This fusion enables us to understand the intricate relationship between air quality, weather patterns, and their geographical variations across India.
+
+```{r}
+#Convert the Date to date type
+aqi_city_day$Date = as_date(aqi_city_day$Date, format='%Y-%m-%d')
+
+
+#Extract month and year as additional columns
+merged <- aqi_city_day
+merged <- merged %>% mutate(Month = month(Date))
+merged <- merged %>% mutate(Year = year(Date))
+merged <- merged %>% mutate(Day = wday(Date, label=TRUE, abbr=FALSE))
+
+
+#Import Indian Cities database
+indian_cities$City = as_factor(indian_cities$City)
+
+#Merge Lat-Long into aqi_day
+merged <- merge(merged, indian_cities%>%select("City", "Lat", "Long"), by="City")
+
+#Introduce new column for paritioning into N/S, where North >22.5Lat
+merged <-merged %>% mutate(Region = ifelse(Lat>22.5,"North","South"))
+
+#Introduce column for season. Summer:03-06, Rainy:07-10, Winter:11-02
+merged <- merged %>% mutate(Season = case_when(Month %in% c(3,4,5,6)~"Summer" , Month %in% c(7,8,9,10) ~"Rainy", Month %in% c(11,12,1,2) ~"Winter" ) )
+
+#Introduce column for partitioning into weekday and weekend. Weekend = Saturday, Sunday; Weekday= others
+merged <- merged %>% mutate(DayType = ifelse(Day %in% c("Sunday", "Saturday"), "Weekend", "Weekday"))
+
+
+yearly_summary <-merged %>% group_by(Year, City) %>% summarise(avg_AQI=mean(AQI, na.rm=TRUE)) 
+yearly_summary <- merge(yearly_summary, indian_cities%>%select("City", "Lat", "Long"), by="City")
+
+seasonal_summary <-merged %>% group_by(Year, City, Season) %>% summarise(avg_AQI=mean(AQI, na.rm=TRUE)) 
+seasonal_summary <- merge(seasonal_summary, indian_cities%>%select("City", "Lat", "Long"), by="City")
+
+regional_summary <-merged %>% group_by(Year, City, Region) %>% summarise(avg_AQI=mean(AQI, na.rm=TRUE)) 
+regional_summary <- merge(regional_summary, indian_cities%>%select("City", "Lat", "Long"), by="City")
+
+regional_seasonal_summary <-merged %>% group_by(Year, Region, Season, City) %>% summarise(avg_AQI=mean(AQI, na.rm=TRUE)) 
+regional_seasonal_summary <- merge(regional_seasonal_summary, indian_cities%>%select("City", "Lat", "Long"), by="City")
+
+weektype_summary <-merged %>% group_by(Year, Month, City, DayType) %>% summarise(avg_AQI=mean(AQI, na.rm=TRUE)) 
+weektype_summary <- merge(weektype_summary, indian_cities%>%select("City", "Lat", "Long"), by="City")
+
+ggplot(yearly_summary, aes(x=Year, y=avg_AQI))+geom_line()+facet_wrap(~City, ncol=6)
+```
+
+#### Distribution Analysis of AQI Across Cities Over the Years
+
+```{r message=FALSE}
+m_2015<-yearly_summary%>%filter(Year==2015)
+m_2016<-yearly_summary%>%filter(Year==2016)
+m_2017<-yearly_summary%>%filter(Year==2017)
+m_2018<-yearly_summary%>%filter(Year==2018)
+m_2019<-yearly_summary%>%filter(Year==2019)
+m_2020<-yearly_summary%>%filter(Year==2020)
+
+yearly_summary %>% 
+        leaflet()%>%
+        addProviderTiles("CartoDB")%>%
+        addCircleMarkers(data=m_2015,radius=~avg_AQI/10,popup=~City, group="2015")%>%
+        addCircleMarkers(data=m_2016,radius=~avg_AQI/10,popup=~City, group="2016")%>%
+        addCircleMarkers(data=m_2017,radius=~avg_AQI/10,popup=~City, group="2017")%>%
+        addCircleMarkers(data=m_2018,radius=~avg_AQI/10,popup=~City, group="2018")%>%
+        addCircleMarkers(data=m_2019,radius=~avg_AQI/10,popup=~City, group="2019")%>%
+        addCircleMarkers(data=m_2020,radius=~avg_AQI/10,popup=~City, group="2020")%>%
+        addLayersControl(overlayGroups=c("2015","2016","2017","2018","2019","2020"), layersControlOptions(collapsed=FALSE))-> map
+map <- map %>% hideGroup(2016) %>% hideGroup(2017) %>% hideGroup(2018) %>% hideGroup(2019)%>% hideGroup(2020)
+
+map        
+ 
+```
+
+#### Trend in AQI across cities annually for different seasons.
+
+
+```{r}
+seasonal_summary <-merged %>% group_by(Year, City, Season) %>% summarise(avg_AQI=mean(AQI, na.rm=TRUE)) 
+seasonal_summary <- merge(seasonal_summary, indian_cities%>%select("City", "Lat", "Long"), by="City")
+
+ggplot(data = seasonal_summary,aes(x=Year, y=avg_AQI, color=Season))+geom_point()+facet_wrap(~City, ncol=3)
+```
+
+
+#### Capture the seasonal variation for only six cities
+
+
+```{r}
+# Capture the seasonal variation for only six cities
+filtered <- seasonal_summary%>%
+            filter(City %in% c("Ahmedabad", "Delhi", "Patna", "Mumbai","Bengaluru"))
+ggplot(data = filtered,aes(x=Year, y=avg_AQI, color=Season))+
+      geom_point()+
+      facet_wrap(~City, ncol=1, scales="free_y")+
+      theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+```{r,include=FALSE, echo=FALSE, error=FALSE, warning=FALSE}
+weektype_summary <-merged %>% group_by(Year, City, DayType) %>% summarise(avg_AQI=mean(AQI, na.rm=TRUE)) 
+eektype_summary <- merge(weektype_summary, indian_cities%>%select("City", "Lat", "Long"), by="City")
+
+ggplot(data = weektype_summary,aes(x=City, y=avg_AQI, fill=DayType))+
+              geom_bar(stat = "identity", position = position_dodge(), alpha = 0.75)+
+              facet_wrap(~Year, ncol=2, scales="free_y")+ 
+              theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+stations <- read_csv("d2/stations.csv")
+stations%>% group_by(State, City) %>% summarise(count=n()) ->t1
+```
+
+```{r}
+ggplot(data=t1, aes(x=State, fill=City))+geom_bar()+ 
+              theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), legend.position = "none")
+```
+
+
+```{r,include=FALSE, echo=FALSE, error=FALSE, warning=FALSE}
+#Add field City to the tables. Convert the field to factor 
+jodhpur1 <- mutate(jodhpur, City="Rajastan")
+jodhpur1$City <- as_factor(jodhpur1$City)
+
+#Add Lat/Long and Elevation data wrt to the City of jodhpur1 and Location_Name of geolocations
+jodhpur1 <-merge(jodhpur1, geolocations, by.x = "City", by.y="Location_Name")
+
+#Add field City to the Bangalore. Convert the field to factor 
+bangalore1 <- mutate(bangalore, City="Bangalore")
+bangalore1$City <- as_factor(bangalore1$City)
+
+#Add Lat/Long and Elevation data wrt to the City of jodhpur1 and Location_Name of geolocations
+bangalore1 <-merge(bangalore1, geolocations, by.x = "City", by.y="Location_Name")
+
+
+#Add field City to the Delhi Convert the field to factor 
+delhi1 <- mutate(delhi, City="Delhi")
+delhi1$City <- as_factor(delhi1$City)
+
+#Add Lat/Long and Elevation data wrt to the City of jodhpur1 and Location_Name of geolocations
+delhi1 <-merge(delhi1, geolocations, by.x = "City", by.y="Location_Name")
+
+
+#Add field City to the Cehnnai Convert the field to factor 
+chennai1 <- mutate(chennai, City="Chennai")
+chennai1$City <- as_factor(chennai1$City)
+
+#Add Lat/Long and Elevation data wrt to the City of jodhpur1 and Location_Name of geolocations
+chennai1 <-merge(chennai1, geolocations, by.x = "City", by.y="Location_Name")
+
+
+#Add field City to the Mumbai Convert the field to factor 
+mumbai1 <- mutate(mumbai, City="Mumbai")
+mumbai1$City <- as_factor(mumbai1$City)
+
+#Add Lat/Long and Elevation data wrt to the City of jodhpur1 and Location_Name of geolocations
+mumbai1 <-merge(mumbai1, geolocations, by.x = "City", by.y="Location_Name")
+
+
+
+#Add field City to the Delhi Convert the field to factor 
+lucknow1 <- mutate(lucknow, City="Lucknow")
+lucknow1$City <- as_factor(lucknow1$City)
+
+#Add Lat/Long and Elevation data wrt to the City of jodhpur1 and Location_Name of geolocations
+lucknow1 <-merge(lucknow1, geolocations, by.x = "City", by.y="Location_Name")
+
+#Merge all the six dataframes together
+merged_weather <- bind_rows(lucknow1, mumbai1, delhi1, chennai1)
+merged_weather<- bind_rows(merged_weather, jodhpur1, bangalore1)
+
+
+#Create a region columne where region=Coastal if elevation < 100, else Noncoastal
+merged_weather <- merged_weather %>% mutate(Region = ifelse(Elevation > 100, "Noncoastal", "Coastal"))
+
+
+# Create Season column, divide rows into Summer/Winter/Rainy season. Summer (month=03,4,5,6) Winter(month=11,12,1,2), Rainy(month=7,8,9,10)
+merged_weather <- merged_weather %>% mutate(Season = case_when(Month %in% c(3,4,5,6)~"Summer" , Month %in% c(7,8,9,10) ~"Rainy", Month %in% c(11,12,1,2) ~"Winter" ))
+
+
+#Remove the na columns from tavg
+merged_weather <- merged_weather%>% drop_na(tavg)
+
+#Remove the na columns from prcp
+merged_weather <- merged_weather%>% drop_na(prcp)
+
+#Create a new dataframe with monthly avg temp, and prcp for cities across the years.
+summary_merged_weather <- merged_weather %>% 
+                          group_by(City, Year) %>% 
+                          summarise(t_avg_annual = mean(tavg), prcp_avg_annual = mean(prcp))
+
+
+#identify which months receive nore rain in coastal regions
+ summary_merged_weather %>% 
+                    ggplot(aes(x=factor(Year), y=prcp_avg_annual, group=City))+
+                    geom_line(aes(color=City))+ 
+              theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+ 
+
+summary_merged_weather %>% 
+                    ggplot(aes(x=factor(Year), y=t_avg_annual, group=City))+
+                    geom_line(aes(color=City))+ 
+              theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+```
+
+```{r}
+summary_merged_weather <-merge(summary_merged_weather, geolocations, by.x = "City", by.y="Location_Name")
+
+#Create a region columne where region=Coastal if elevation < 100, else Noncoastal
+summary_merged_weather <- summary_merged_weather %>% mutate(Region = ifelse(Elevation > 100, "Noncoastal", "Coastal"))
+
+
+#Plot the annual varation in temp and prcp based on coastal and non-coastal
+summary_merged_weather %>% filter(Year %in% seq(1990,1999))%>%
+                            group_by(Year, Region, City) %>%
+                            ggplot(aes(x=City, y=t_avg_annual, color=Region)) +
+                            geom_point() +
+                            facet_wrap(~Year, ncol=5)+ 
+              theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+##### Mean of Pollutant, Anually.
+
+```{r,include=FALSE, echo=FALSE, error=FALSE, warning=FALSE}
+#find the mean of each pollutant for each city annually
+aggregate(merged[, 3:14], list(merged$City,merged$Year), mean, na.rm=TRUE) ->pollutant_annual_city
+colnames(pollutant_annual_city)[1]<-"City"
+colnames(pollutant_annual_city)[2]<-"Year"
+
+#gather into a new df
+gather(pollutant_annual_city, key="Pollutant", value="Avg", -City, -Year) ->gathered_df
+
+gathered_df%>%filter(City %in% c("Ahmedabad", "Bengaluru", "Mumbai", "Delhi", "Patna")) %>%                 group_by(City,Year)%>%
+                     ggplot(aes(x=Pollutant, y=Avg, color=Pollutant, na.rm=TRUE))+
+                     geom_col(aes(fill=Pollutant))+
+                     facet_grid(vars(City),vars(Year), scales="free_y")+ 
+                     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+```{r}
+gathered_df%>%filter(City %in% c("Ahmedabad", "Bengaluru", "Mumbai", "Delhi", "Patna")) %>%
+                     filter(!Pollutant %in% c("PM2.5","PM10")) %>%
+                     group_by(City,Year)%>%
+                     ggplot(aes(x=Pollutant, y=Avg, color=Pollutant, na.rm=TRUE))+
+                     geom_col(aes(fill=Pollutant))+
+                     facet_grid(vars(City),vars(Year), scales="free_y")+ 
+                     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+
+### Prediction Model for AQI
+
+```{r,include=FALSE, echo=FALSE, error=FALSE, warning=FALSE}
+# get the data for Delhi and Bengaluru for 2016 from weather set
+merged_weather%>%filter(Year==2019)%>%
+                 filter(City %in% c("Delhi", "Bangalore")) %>%
+                 select(City,time,tavg,prcp)-> weather_select
+
+#change the name of the column from time to Date
+names(weather_select)[names(weather_select)=="time"]<-"Date"
+
+#Change the name of the city from Bangalore to Bengaluru
+levels(weather_select$City)<-c(levels(weather_select$City), "Bengaluru")
+weather_select$City[weather_select$City=="Bangalore"]<-"Bengaluru"
+
+# Get the data for Delhi and Bengaluru for 2016 from aqi set
+merged %>% filter(Year == 2019) %>%
+           filter(City %in% c("Delhi", "Bengaluru")) -> aqi_select
+
+
+#merge the two datasets
+merge(weather_select, aqi_select, by=c("City","Date"))->merged_aqi_weather
+```
+
+```{r}
+library(dplyr)
+library(ggplot2)
+
+# Calculate the proportion of missing values for each variable
+miss_summary <- merged_aqi_weather %>%
+                summarise(across(everything(), ~sum(is.na(.))/n())) %>%
+                pivot_longer(everything(), names_to = "Variable", values_to = "MissingProportion")
+
+# Plot the missingness summary for the entire dataset
+ggplot(miss_summary, aes(x = Variable, y = MissingProportion)) +
+  geom_bar(stat = "identity") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+```
+
+```{r}
+# Calculate the proportion of missing values for each variable, grouped by City
+miss_summary_city <- merged_aqi_weather %>%
+                     group_by(City) %>%
+                     summarise(across(everything(), ~sum(is.na(.))/n())) %>%
+                     pivot_longer(-City, names_to = "Variable", values_to = "MissingProportion")
+
+# Plot the missingness summary by city
+ggplot(miss_summary_city, aes(x = Variable, y = MissingProportion, fill = City)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+```
+
+
+```{r,include=FALSE, echo=FALSE, error=FALSE, warning=FALSE}
+merged_aqi_weather<-merged_aqi_weather%>%select(-Xylene)
+```
+
+```{r}
+library(statisticalModeling)
+
+merged_aqi_weather$training_cases <- rnorm(nrow(merged_aqi_weather)) > 0
+
+# Build base model AQI ~ tavg + prcp + Month + PM2.5 + PM10 + O3 with training cases
+model1 <- lm(AQI ~ tavg + prcp + Month + PM2.5 + PM10 + O3, data = subset(merged_aqi_weather, training_cases))
+
+# Evaluate the model for the testing cases
+pred_model1 <- evaluate_model(model1, data = subset(merged_aqi_weather,!training_cases))
+
+# Calculate the MSE on the testing data
+with(data = pred_model1, mean((AQI - pred_model1$model_output)^2)) ->in_sample_error1
+
+testing_data<-subset(merged_aqi_weather, !training_cases)
+plot_data1<-data.frame(predicted=pred_model1$model_output, actual=testing_data$AQI)
+
+ggplot(data=plot_data1, aes(x=predicted, y=actual))+geom_point()+geom_abline(intercept = 0, slope =1, color ="red")
+```
+
+## 5. Observations and Conclusions
+
+[Summarize the key findings, insights, and implications of your analysis]
+
+## References
+
+[Include any references or data sources here]
