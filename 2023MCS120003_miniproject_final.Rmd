@@ -1745,6 +1745,11 @@ ggplot(data=plot_data1, aes(x=predicted, y=actual))+geom_point()+geom_abline(int
 ### Overall Insights
 The comprehensive analysis combining air quality, temperature, and precipitation data reveals a multi-faceted picture of environmental conditions across Indian cities. The findings highlight the urgency of addressing urban pollution and the importance of monitoring climate trends to inform policy and urban planning. The observed trends and patterns in these environmental parameters are critical for understanding the broader impacts of urbanization and climate change on public health and ecosystems.
 
+## Future Directions
+
+- Further research can explore the long-term impacts of these environmental trends on public health, ecosystems, and urban development.
+- Enhancing predictive models with more variables and advanced techniques could provide more precise AQI forecasts, aiding in timely and effective response strategies.
+
 ## References
 
 To ensure a comprehensive understanding and accurate interpretation of the data analysis presented in this report, the following sources and references have been utilized:
